@@ -7,6 +7,7 @@
 
 @interface ALPreferenceViewController : NSViewController {
 	IBOutlet NSTextField* hostField;
+	IBOutlet NSTextField* portField;
 	IBOutlet NSSecureTextField* passwordField;
 }
 

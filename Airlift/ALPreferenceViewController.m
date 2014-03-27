@@ -11,11 +11,24 @@ static NSString* serviceName = @"airlift";
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+	
+	if (self) {
 		NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
-		[hostField setStringValue:host];
-		[passwordField setStringValue:[ALPreferenceViewController retrievePasswordForHost:host]];
-    }
+		NSString* password = [ALPreferenceViewController retrievePasswordForHost:host];
+		
+		// force the window to load so that our text field references are loaded,
+		// allowing text to be put in them
+		[[self view] window];
+		
+		if (host == nil || [host length] == 0 || password == nil || [password length] == 0) {
+			[NSApp activateIgnoringOtherApps:YES];
+			[[[self view] window] makeKeyAndOrderFront:nil];
+		} else {
+			[hostField setStringValue:host];
+			[passwordField setStringValue:password];
+		}
+	}
+	
     return self;
 }
 
@@ -36,7 +49,7 @@ static NSString* serviceName = @"airlift";
 }
 
 - (IBAction) didEnterPassword:(id)sender {
-	NSString* host =[[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
+	NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
 	NSString* password = [passwordField stringValue];
 	
 	NSLog(@"didEnterPassword: %@ forHostName: %@", password, host);

@@ -28,6 +28,7 @@
 	[_window setReleasedWhenClosed:NO];
 	[_window center];
 	[_window setTitle:@"Connection details"];
+	[_window setLevel:NSFloatingWindowLevel];
 	
 	EventHotKeyRef hotKeyRef;
 	EventHotKeyID  hotKeyID;
@@ -47,7 +48,8 @@
 }
 
 - (void) didClickPreferences:(id)sender {
-	[[self window] makeKeyAndOrderFront:self];
+	[NSApp activateIgnoringOtherApps:YES];
+	[_window makeKeyAndOrderFront:nil];
 }
 
 - (void) quit:(id)sender {
