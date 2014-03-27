@@ -20,10 +20,12 @@
 - (id) init {
 	self = [super init];
 	if (self != nil) {
-		NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
-		uploadURL      = [[NSURL URLWithString:host] URLByAppendingPathComponent:@"/upload/file"];
-		password       = [ALPreferenceViewController retrievePasswordForHost:host];
-		appDelegate    = [ALAppDelegate sharedAppDelegate];
+		NSString* host     = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
+		NSString* port     = [[NSUserDefaults standardUserDefaults] stringForKey:@"port"];
+		NSString* hostPort = [NSString stringWithFormat:@"%@:%@", host, port];
+		uploadURL          = [[NSURL URLWithString:hostPort] URLByAppendingPathComponent:@"/upload/file"];
+		password           = [ALPreferenceViewController retrievePasswordForHost:host];
+		appDelegate        = [ALAppDelegate sharedAppDelegate];
 	}
 	return self;
 }
@@ -131,7 +133,7 @@ didCompleteWithError:(NSError *)error {
 	if (error != nil) {
 		[appDelegate showNotificationOfType:ALNotificationUploadError
 									  title:@"Error uploading"
-								   subtitle:@"Failed to decode server response"
+								   subtitle:[NSString stringWithFormat:@"Failed to decode server response (status %d)", responseCode]
 							 additionalInfo:nil];
 		NSLog(@"Failed to decode server response: %@", error);
 		return;
