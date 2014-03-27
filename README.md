@@ -7,7 +7,7 @@ A binary download may be found under the [releases tab](https://github.com/moshe
 
 ### Usage
 
-Launch the app and a black circle should show up in your menu bar. Yes, that is a placeholder icon.
+Launch the app and the icon should show up in your menu bar.
 
 ![Menu item](https://i.ktkr.us/t5xw)
 
