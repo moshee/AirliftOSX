@@ -5,13 +5,14 @@
 #import "ALAppDelegate.h"
 
 @interface ALAppDelegate () {
-	ALDropZoneView* dropZone;
 	NSMenu* menu;
 }
 
 @end
 
 @implementation ALAppDelegate
+
+@synthesize dropZone = _dropZone;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	prefs = [[ALPreferenceViewController alloc] initWithNibName:@"ALPreferenceViewController" bundle:nil];
@@ -21,7 +22,7 @@
 	[menu addItemWithTitle:@"Preferences..." action:@selector(didClickPreferences:) keyEquivalent:@""];
 	[menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
 
-	dropZone = [[ALDropZoneView alloc] initWithMenu:menu];
+	_dropZone = [[ALDropZoneView alloc] initWithMenu:menu];
 
 	[_window setContentSize:[[prefs view] frame].size];
 	[_window setContentView:[prefs view]];

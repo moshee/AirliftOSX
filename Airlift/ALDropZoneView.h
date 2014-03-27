@@ -12,13 +12,8 @@
 
 //- (void) showPopover;
 //- (void) hidePopover;
-- (void) setProgress:(float)progress;
+- (void) setStatus:(ALDropZoneStatus)status;
+- (void) setProgress:(CGFloat)progress;
 
-enum IconStatus {
-	StatusNormal = 0,
-	StatusDrag,
-	StatusSelected,
-	StatusUploading
-};
 
 @end

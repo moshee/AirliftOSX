@@ -15,6 +15,7 @@
 }
 
 @property (assign) IBOutlet NSWindow *window;
+@property (readonly) ALDropZoneView* dropZone;
 
 + (void) uploadScreenshot:(NSArray*)additionalArgs;
 + (ALAppDelegate*) sharedAppDelegate;

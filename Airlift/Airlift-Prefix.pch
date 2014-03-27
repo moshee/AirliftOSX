@@ -9,6 +9,13 @@
 #endif
 
 typedef enum {
+	ALDropZoneStatusNormal = 0,
+	ALDropZoneStatusDrag,
+	ALDropZoneStatusSelected,
+	ALDropZoneStatusUploading
+} ALDropZoneStatus;
+
+typedef enum {
 	ALNotificationURLCopied = 0,
 	ALNotificationUploadError,
 	ALNotificationParameterError

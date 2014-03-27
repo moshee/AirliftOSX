@@ -7,8 +7,9 @@
 @interface ALDropZoneView () {
 	NSStatusItem*    statusItem;
 	NSPopover*       popover;
-	int              state;
+	int              status;
 	id               popoverTransiencyMonitor;
+	CGFloat          progress;
 }
 
 @end
@@ -47,7 +48,8 @@
 		[statusItem setView:self];
 		[menu setDelegate:self];
 		[self setMenu:menu];
-		state = StatusNormal;
+		status = ALDropZoneStatusNormal;
+		progress = 0.0;
 		[self registerForDraggedTypes:@[NSFilenamesPboardType]];
 	}
 	
@@ -58,22 +60,22 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
 	[statusItem drawStatusBarBackgroundInRect:dirtyRect
-								withHighlight:(state == StatusSelected)];
+								withHighlight:(status == ALDropZoneStatusSelected)];
 	
 	NSImage* statusIcon;
-	switch (state) {
-	case StatusNormal:
+	switch (status) {
+	case ALDropZoneStatusNormal:
 		statusIcon = [NSImage imageNamed:@"StatusIcon"];
 		break;
-	case StatusDrag:
+	case ALDropZoneStatusDrag:
 		statusIcon = [NSImage imageNamed:@"StatusIconDrag"];
 		break;
-	case StatusSelected:
+	case ALDropZoneStatusSelected:
 		statusIcon = [NSImage imageNamed:@"StatusIconSelected"];
 		break;
-			//	case StatusUploading:
-			//statusIcon = [NSImage imageNamed:@"StatusIconUploading"];
-			//break;
+	case ALDropZoneStatusUploading:
+		statusIcon = [NSImage imageNamed:@"StatusIconUploading"];
+		break;
 	}
 	
 	NSSize  iconSize  = statusIcon.size;
@@ -86,10 +88,19 @@
 				   fromRect:NSZeroRect
 				  operation:NSCompositeSourceOver
 				   fraction:1.0];
+	
+	if (status == ALDropZoneStatusUploading) {
+		NSImage* overlay = [NSImage imageNamed:@"StatusIcon"];
+		iconSize = [overlay size];
+		CGFloat p = progress * iconSize.height;
+		
+		NSRect mask = NSMakeRect(0, 0, iconSize.width, p);
+		[overlay compositeToPoint:iconPoint fromRect:mask operation:NSCompositeDestinationAtop];
+	}
 }
 
-- (void) setState:(int)_state {
-	state = _state;
+- (void) setStatus:(ALDropZoneStatus)_status {
+	status = _status;
 	self.needsDisplay = YES;
 }
 
@@ -101,19 +112,19 @@
 		[self showPopover];
 	}
 	 */
-	if (state == StatusNormal) {
-		[self setState:StatusSelected];
+	if (status == ALDropZoneStatusNormal) {
+		[self setStatus:ALDropZoneStatusSelected];
 	} else {
-		[self setState:StatusNormal];
+		[self setStatus:ALDropZoneStatusNormal];
 	}
 	
-	if (state == StatusSelected) {
+	if (status == ALDropZoneStatusSelected) {
 		[statusItem popUpStatusItemMenu:[self menu]];
 	}
 }
 
 - (void) menuDidClose:(NSMenu *)menu {
-	[self setState:StatusNormal];
+	[self setStatus:ALDropZoneStatusNormal];
 }
 
 /*
@@ -150,19 +161,20 @@
 
 #pragma mark - Uploading
 
-- (void) setProgress:(float)progress {
-	
+- (void) setProgress:(CGFloat)_progress {
+	progress = _progress;
+	[self setNeedsDisplay:YES];
 }
 
 #pragma mark - Drag and drop
 
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-	[self setState:StatusDrag];
+	[self setStatus:ALDropZoneStatusDrag];
 	return NSDragOperationCopy;
 }
 
 - (void) draggingExited:(id<NSDraggingInfo>)sender {
-	[self setState:StatusNormal];
+	[self setStatus:ALDropZoneStatusNormal];
 }
 
 - (BOOL) prepareForDragOperation:(id<NSDraggingInfo>)sender {
@@ -170,13 +182,14 @@
 }
 
 - (BOOL) performDragOperation:(id<NSDraggingInfo>)sender {
-	[self setState:StatusNormal];
+	[self setStatus:ALDropZoneStatusNormal];
 	NSURL* filePath = [NSURL URLFromPasteboard:[sender draggingPasteboard]];
 	
 	if (filePath == nil) {
 		return NO;
 	}
 	
+	[self setStatus:ALDropZoneStatusUploading];
 	[[ALUploadManager new] uploadFileAtPath:filePath];
 	
 	return YES;

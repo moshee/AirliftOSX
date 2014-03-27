@@ -108,26 +108,31 @@ NSString* copyString(NSString* str) {
 	 totalBytesSent:(int64_t)totalBytesSent
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 	
-	NSLog(@"Progress: %d%%", (int)roundf(100 * ((float)totalBytesSent / (float)totalBytesExpectedToSend)));
+	//NSLog(@"Progress: %d%%", (int)roundf(100 * ((float)totalBytesSent / (float)totalBytesExpectedToSend)));
+	CGFloat progress = (CGFloat)totalBytesSent / (CGFloat)totalBytesExpectedToSend;
+	[[appDelegate dropZone] setProgress:progress];
 }
 
 - (void) URLSession:(NSURLSession *)session
 			   task:(NSURLSessionTask *)task
 didCompleteWithError:(NSError *)error {
+	
+	[[appDelegate dropZone] setStatus:ALDropZoneStatusNormal];
+	
 	if (error != nil) {
 		[appDelegate showNotificationOfType:ALNotificationUploadError
-							          title:@"Error uploading"
-							       subtitle:[error description]
-					         additionalInfo:nil];
+									  title:@"Error uploading"
+								   subtitle:[error description]
+							 additionalInfo:nil];
 		return;
 	}
 	
 	NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
 	if (error != nil) {
 		[appDelegate showNotificationOfType:ALNotificationUploadError
-							          title:@"Error uploading"
-							       subtitle:@"Failed to decode server response"
-					         additionalInfo:nil];
+									  title:@"Error uploading"
+								   subtitle:@"Failed to decode server response"
+							 additionalInfo:nil];
 		NSLog(@"Failed to decode server response: %@", error);
 		return;
 	}
@@ -135,9 +140,9 @@ didCompleteWithError:(NSError *)error {
 	if (responseCode != 201) {
 		NSString* subtitle = [NSString stringWithFormat:@"server returned error: %@ (status %d)", [jsonResponse valueForKey:@"Err"], responseCode];
 		[appDelegate showNotificationOfType:ALNotificationUploadError
-							          title:@"Error uploading"
-							       subtitle:subtitle
-					         additionalInfo:nil];
+									  title:@"Error uploading"
+								   subtitle:subtitle
+							 additionalInfo:nil];
 		return;
 	}
 	
