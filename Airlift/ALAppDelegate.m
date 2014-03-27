@@ -45,6 +45,12 @@
 	hotKeyID.signature = 'SHOT';
 	hotKeyID.id        = HotkeyTakeFullScreenshot;
 	RegisterEventHotKey(kVK_ANSI_3, optionKey + shiftKey, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef);
+	
+	[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+}
+
++ (ALAppDelegate*) sharedAppDelegate {
+	return (ALAppDelegate*)[[NSApplication sharedApplication] delegate];
 }
 
 - (void) didClickPreferences:(id)sender {
@@ -54,6 +60,48 @@
 
 - (void) quit:(id)sender {
 	[NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
+}
+
+- (void) showNotificationOfType:(ALNotificationType)notificationType
+						  title:(NSString*)title
+					   subtitle:(NSString*)subtitle
+				 additionalInfo:(NSDictionary*)info {
+	
+	NSUserNotification* notification = [[NSUserNotification alloc] init];
+	NSMutableDictionary* userInfo = [NSMutableDictionary dictionaryWithDictionary:info];
+	[userInfo setObject:[NSNumber numberWithInteger:notificationType] forKey:@"type"];
+	
+	[notification setUserInfo:userInfo];
+	[notification setTitle:title];
+	[notification setSubtitle:subtitle];
+	
+	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+}
+
+#pragma mark - NSUserNotificationCenterDelegate
+
+- (void) userNotificationCenter:(NSUserNotificationCenter *)center
+		didActivateNotification:(NSUserNotification *)notification {
+	
+	ALNotificationType notificationType = [[[notification userInfo] valueForKey:@"type"] intValue];
+	
+	switch (notificationType) {
+		case ALNotificationURLCopied: {
+			NSURL* responseURL = [NSURL URLWithString:[[notification userInfo] objectForKey:@"url"]];
+			[[NSWorkspace sharedWorkspace] openURL:responseURL];
+			break;
+		}
+		case ALNotificationUploadError:
+			break;
+		case ALNotificationParameterError:
+			[[ALAppDelegate sharedAppDelegate] didClickPreferences:self];
+			break;
+	}
+}
+
+- (void) userNotificationCenter:(NSUserNotificationCenter *)center
+		 didDeliverNotification:(NSUserNotification *)notification {
+	
 }
 
 #pragma mark - Hotkey handling

@@ -7,3 +7,9 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
 #endif
+
+typedef enum {
+	ALNotificationURLCopied = 0,
+	ALNotificationUploadError,
+	ALNotificationParameterError
+} ALNotificationType;

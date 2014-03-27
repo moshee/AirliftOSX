@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #import "ALPreferenceViewController.h"
+#import "ALAppDelegate.h"
 
 @implementation ALPreferenceViewController
 
@@ -21,8 +22,7 @@ static NSString* serviceName = @"airlift";
 		[[self view] window];
 		
 		if (host == nil || [host length] == 0 || password == nil || [password length] == 0) {
-			[NSApp activateIgnoringOtherApps:YES];
-			[[[self view] window] makeKeyAndOrderFront:nil];
+			[[ALAppDelegate sharedAppDelegate] didClickPreferences:self];
 		} else {
 			[hostField setStringValue:host];
 			[passwordField setStringValue:password];
@@ -36,7 +36,6 @@ static NSString* serviceName = @"airlift";
 
 - (IBAction) didEnterHostname:(id)sender {
 	NSString* host = hostField.stringValue;
-	NSLog(@"didEnterHostname: %@", host);
 
 	if ([host length] > 0) {
 		if ([host rangeOfString:@"://"].location == NSNotFound) {
@@ -52,7 +51,6 @@ static NSString* serviceName = @"airlift";
 	NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
 	NSString* password = [passwordField stringValue];
 	
-	NSLog(@"didEnterPassword: %@ forHostName: %@", password, host);
 	if (host.length > 0) {
 		[ALPreferenceViewController updatePassword:password forHost:host];
 	}
@@ -80,7 +78,7 @@ static NSString* serviceName = @"airlift";
 	}
 	
 	if (status != 0) {
-		NSLog(@"Error updating password: %@", [self messageForStatusCode:status]);
+		NSRunAlertPanel(@"Keychain error", @"Error updating password: %@", @"OK", nil, nil, [self messageForStatusCode:status]);
 	}
 }
 
@@ -113,7 +111,7 @@ static NSString* serviceName = @"airlift";
 	case errSecItemNotFound:
 		break;
 	default:
-		NSLog(@"Error retrieving keychain item: %@", [self messageForStatusCode:status]);
+		NSRunAlertPanel(@"Keychain error", @"Error retrieving keychain item: %@", @"OK", nil, nil, [self messageForStatusCode:status]);
 		break;
 	}
 	

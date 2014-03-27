@@ -177,7 +177,6 @@
 		return NO;
 	}
 	
-	NSLog(@"uploading file %@", filePath);
 	[[ALUploadManager new] uploadFileAtPath:filePath];
 	
 	return YES;

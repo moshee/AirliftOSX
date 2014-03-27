@@ -1,10 +1,6 @@
-//
-//  main.m
-//  Airlift
-//
-//  Created by 晓易 孟 on 2/23/14.
-//  Copyright (c) 2014 display: none;. All rights reserved.
-//
+// Copyright 2014 display: none;. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 #import <Cocoa/Cocoa.h>
 

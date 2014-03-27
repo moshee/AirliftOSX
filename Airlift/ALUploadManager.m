@@ -3,12 +3,14 @@
 // license that can be found in the LICENSE file.
 
 #import "ALUploadManager.h"
+#import "ALAppDelegate.h"
 
 @interface ALUploadManager () {
 	NSURL* uploadURL;
 	NSString* password;
 	NSMutableData* receivedData;
 	int responseCode;
+	ALAppDelegate* appDelegate;
 }
 
 @end
@@ -21,24 +23,30 @@
 		NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
 		uploadURL      = [[NSURL URLWithString:host] URLByAppendingPathComponent:@"/upload/file"];
 		password       = [ALPreferenceViewController retrievePasswordForHost:host];
+		appDelegate    = [ALAppDelegate sharedAppDelegate];
 	}
 	return self;
 }
 
 - (void) uploadFileAtPath:(NSURL*)path {
 	if (uploadURL == nil) {
-		NSLog(@"Empty host");
+		[appDelegate showNotificationOfType:ALNotificationParameterError
+									  title:@"Error"
+								   subtitle:@"A host has not been configured"
+							 additionalInfo:nil];
 		return;
 	}
 	if (password == nil || [password length] == 0) {
-		NSLog(@"Empty password");
+		[appDelegate showNotificationOfType:ALNotificationParameterError
+									  title:@"Error"
+								   subtitle:@"A password has not been set for the configured host"
+							 additionalInfo:nil];
 		return;
 	}
 	
 	NSString*            fileName  = [[path path] lastPathComponent];
 	NSMutableURLRequest* request   = [NSMutableURLRequest requestWithURL:uploadURL];
 	
-	//	[request setHTTPBodyStream:fileStream];
 	[request setHTTPMethod:@"POST"];
 	[request setValue:password forHTTPHeaderField:@"X-Airlift-Password"];
 	[request setValue:fileName forHTTPHeaderField:@"X-Airlift-Filename"];
@@ -49,22 +57,23 @@
 	[upload resume];
 }
 
+
 - (void) presentURL:(NSDictionary*)jsonResponse {
 	NSString* linkableURL = [NSString stringWithFormat:@"%@://%@", [uploadURL scheme], [jsonResponse valueForKey:@"URL"]];
-	NSLog(@"got URL: %@", linkableURL);
-	
-	NSUserNotification* notification = [[NSUserNotification alloc] init];
 	
 	NSString* errMsg = copyString(linkableURL);
 	if (errMsg != nil) {
-		[notification setTitle:@"Error"];
-		[notification setSubtitle:errMsg];
+		[appDelegate showNotificationOfType:ALNotificationUploadError
+									  title:@"Error"
+								   subtitle:errMsg
+							 additionalInfo:nil];
 	} else {
-		[notification setTitle:linkableURL];
-		[notification setSubtitle:@"URL copied to clipboard"];
+		NSDictionary* info = [NSDictionary dictionaryWithObject:linkableURL forKey:@"url"];
+		[appDelegate showNotificationOfType:ALNotificationURLCopied
+									  title:linkableURL
+								   subtitle:@"URL copied to clipboard"
+							 additionalInfo:info];
 	}
-
-	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 NSString* copyString(NSString* str) {
@@ -90,6 +99,7 @@ NSString* copyString(NSString* str) {
     return msg;
 }
 
+
 #pragma mark - NSURLSessionTaskDelegate
 
 - (void) URLSession:(NSURLSession *)session
@@ -105,18 +115,29 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 			   task:(NSURLSessionTask *)task
 didCompleteWithError:(NSError *)error {
 	if (error != nil) {
-		NSLog(@"Finished with error: %@", error);
+		[appDelegate showNotificationOfType:ALNotificationUploadError
+							          title:@"Error uploading"
+							       subtitle:[error description]
+					         additionalInfo:nil];
 		return;
 	}
 	
 	NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
 	if (error != nil) {
-		NSLog(@"error parsing json: %@", error);
+		[appDelegate showNotificationOfType:ALNotificationUploadError
+							          title:@"Error uploading"
+							       subtitle:@"Failed to decode server response"
+					         additionalInfo:nil];
+		NSLog(@"Failed to decode server response: %@", error);
 		return;
 	}
 	
 	if (responseCode != 201) {
-		NSLog(@"server returned error: %@ (status %d)", [jsonResponse valueForKey:@"Err"], responseCode);
+		NSString* subtitle = [NSString stringWithFormat:@"server returned error: %@ (status %d)", [jsonResponse valueForKey:@"Err"], responseCode];
+		[appDelegate showNotificationOfType:ALNotificationUploadError
+							          title:@"Error uploading"
+							       subtitle:subtitle
+					         additionalInfo:nil];
 		return;
 	}
 	
@@ -132,7 +153,6 @@ didCompleteWithError:(NSError *)error {
 	
 	NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
 	responseCode = (int)[httpResponse statusCode];
-	NSLog(@"response: %d", responseCode);
 	completionHandler(NSURLSessionResponseAllow);
 }
 

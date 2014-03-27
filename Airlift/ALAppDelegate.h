@@ -5,11 +5,11 @@
 #import <Cocoa/Cocoa.h>
 #import <Carbon/Carbon.h>
 
-#import "ALPreferenceViewController.h"
 #import "ALDropZoneView.h"
 #import "ALUploadManager.h"
+#import "ALPreferenceViewController.h"
 
-@interface ALAppDelegate : NSObject <NSApplicationDelegate, NSPopoverDelegate> {
+@interface ALAppDelegate : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate> {
 	@private
 	IBOutlet ALPreferenceViewController* prefs;
 }
@@ -17,8 +17,13 @@
 @property (assign) IBOutlet NSWindow *window;
 
 + (void) uploadScreenshot:(NSArray*)additionalArgs;
++ (ALAppDelegate*) sharedAppDelegate;
 
 - (void) didClickPreferences:(id)sender;
+- (void) showNotificationOfType:(ALNotificationType)notificationType
+						  title:(NSString*)title
+					   subtitle:(NSString*)subtitle
+				 additionalInfo:(NSDictionary*)info;
 
 enum HotkeyAction {
 	HotkeyTakeScreenshot = 0,
