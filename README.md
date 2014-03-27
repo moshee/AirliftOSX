@@ -9,6 +9,12 @@ A binary download may be found under the [releases tab](https://github.com/moshe
 
 Launch the app and a black circle should show up in your menu bar. Yes, that is a placeholder icon.
 
+![Menu item](https://i.ktkr.us/ydRn)
+
 Clicking on it should allow you to access the preferences; here, you need to set up the host, port, and password for your server.
 
+![Preferences window](https://i.ktkr.us/lPXN)
+
 Then, you can drag files onto the icon, use `Opt+Shift+4` to capture and upload a screenshot with the familiar screencapture interface, or `Opt+Shift+3` to upload a shot of the entire screen.
+
+![Dragging](https://i.ktkr.us/a3W2)
