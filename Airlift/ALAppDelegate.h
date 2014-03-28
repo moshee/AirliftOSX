@@ -9,26 +9,24 @@
 #import "ALUploadManager.h"
 #import "ALPreferenceViewController.h"
 
-@interface ALAppDelegate : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate> {
-	@private
-	IBOutlet ALPreferenceViewController* prefs;
+@interface ALAppDelegate
+    : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate> {
+@private
+  IBOutlet ALPreferenceViewController *prefs;
 }
 
-@property (assign) IBOutlet NSWindow *window;
-@property (readonly) ALDropZoneView* dropZone;
+@property(assign) IBOutlet NSWindow *window;
+@property(readonly) ALDropZoneView *dropZone;
 
-+ (void) uploadScreenshot:(NSArray*)additionalArgs;
-+ (ALAppDelegate*) sharedAppDelegate;
++ (void)uploadScreenshot:(NSArray *)additionalArgs;
++ (ALAppDelegate *)sharedAppDelegate;
 
-- (void) didClickPreferences:(id)sender;
-- (void) showNotificationOfType:(ALNotificationType)notificationType
-						  title:(NSString*)title
-					   subtitle:(NSString*)subtitle
-				 additionalInfo:(NSDictionary*)info;
+- (void)didClickPreferences:(id)sender;
+- (void)showNotificationOfType:(ALNotificationType)notificationType
+                         title:(NSString *)title
+                      subtitle:(NSString *)subtitle
+                additionalInfo:(NSDictionary *)info;
 
-enum HotkeyAction {
-	HotkeyTakeScreenshot = 0,
-	HotkeyTakeFullScreenshot
-};
+enum HotkeyAction { HotkeyTakeScreenshot = 0, HotkeyTakeFullScreenshot };
 
 @end

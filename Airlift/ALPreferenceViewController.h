@@ -6,16 +6,16 @@
 #import <Security/Security.h>
 
 @interface ALPreferenceViewController : NSViewController {
-	IBOutlet NSTextField* hostField;
-	IBOutlet NSTextField* portField;
-	IBOutlet NSSecureTextField* passwordField;
+  IBOutlet NSTextField *hostField;
+  IBOutlet NSTextField *portField;
+  IBOutlet NSSecureTextField *passwordField;
 }
 
-- (IBAction) didEnterHostname:(id)sender;
-- (IBAction) didEnterPassword:(id)sender;
+- (IBAction)didEnterHostname:(id)sender;
+- (IBAction)didEnterPassword:(id)sender;
 
-+ (void) updatePassword:(NSString*)newPassword forHost:(NSString*)host;
-+ (NSString*) retrievePasswordForHost:(NSString*)host;
-+ (NSString*) messageForStatusCode:(OSStatus)status;
++ (void)updatePassword:(NSString *)newPassword forHost:(NSString *)host;
++ (NSString *)retrievePasswordForHost:(NSString *)host;
++ (NSString *)messageForStatusCode:(OSStatus)status;
 
 @end

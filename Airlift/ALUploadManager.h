@@ -5,10 +5,11 @@
 #import <Foundation/Foundation.h>
 #import "ALPreferenceViewController.h"
 
-@interface ALUploadManager : NSObject <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
+@interface ALUploadManager
+    : NSObject <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
-+ (void) deleteUploadAtURL:(NSString*)urlToDelete;
++ (void)deleteUploadAtURL:(NSString *)urlToDelete;
 
-- (void) uploadFileAtPath:(NSURL*)path;
+- (void)uploadFileAtPath:(NSURL *)path;
 
 @end

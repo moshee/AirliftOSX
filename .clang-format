@@ -1,0 +1,14 @@
+BasedOnStyle: LLVM
+AccessModifierOffset: -4
+BreakBeforeBraces: Attach
+IndentWidth: 4
+IndentCaseLabels: false
+ObjCSpaceAfterProperty: true
+ObjCSpaceBeforeProtocolList: true
+PointerBindsToType: true
+AllowShortIfStatementsOnASingleLine: false
+SpacesInParentheses: false
+SpacesInCStyleCastParentheses: false
+SpaceInAngles: false
+SpacesInEmptyParentheses: false
+UseTab: ForIndentation
