@@ -125,9 +125,10 @@
 		
 	NSString* errMsg = copyString(linkableURL);
 	if (errMsg != nil) {
+		NSString* subtitle = [NSString stringWithFormat:@"The upload worked, but couldn't copy the URL to clipboard: %@", errMsg];
 		[appDelegate showNotificationOfType:ALNotificationUploadError
-									  title:@"Error"
-								   subtitle:errMsg
+									  title:[NSString stringWithFormat:@"Error copying %@", linkableURL]
+								   subtitle:subtitle
 							 additionalInfo:nil];
 	} else {
 		NSDictionary* info = [NSDictionary dictionaryWithObject:linkableURL forKey:@"url"];
