@@ -69,23 +69,27 @@
 	completionHandler = ^(NSData* data, NSURLResponse* response, NSError* error) {
 		NSString* title;
 		NSString* subtitle;
-		ALNotificationType notificationType;
+		ALNotificationType notificationType = ALNotificationUploadError;
 				
 		if (error != nil) {
 			title = [NSString stringWithFormat:@"Failed to delete %@", urlToDelete];
 			subtitle = [NSString stringWithFormat:@"Error performing request: %@", error];
-			notificationType = ALNotificationUploadError;
 		} else {
 			NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
 			
 			if ([httpResponse statusCode] == 204) {
-				title = @"Deleted";
-				subtitle = [NSString stringWithFormat:@"Successfully deleted %@", urlToDelete];
+				title = [NSString stringWithFormat:@"Deleted %@", urlToDelete];
 				notificationType = ALNotificationOK;
 			} else {
 				title = [NSString stringWithFormat:@"Failed to delete %@", urlToDelete];
-				subtitle = [NSString stringWithFormat:@"Server returned status: %ld", [httpResponse statusCode]];
-				notificationType = ALNotificationUploadError;
+
+				error = nil;
+				NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+				if (error != nil) {
+					subtitle = [NSString stringWithFormat:@"Failed to parse server response (server returned status: %ld)", [httpResponse statusCode]];
+				} else {
+					subtitle = [NSString stringWithFormat:@"Server returned error: %@", [jsonResponse objectForKey:@"Err"]];
+				}
 			}
 		}
 		
