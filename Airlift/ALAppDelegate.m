@@ -87,16 +87,15 @@
 	ALNotificationType notificationType = [[[notification userInfo] valueForKey:@"type"] intValue];
 	
 	switch (notificationType) {
-		case ALNotificationURLCopied: {
-			NSURL* responseURL = [NSURL URLWithString:[[notification userInfo] objectForKey:@"url"]];
-			[[NSWorkspace sharedWorkspace] openURL:responseURL];
-			break;
-		}
-		case ALNotificationUploadError:
-			break;
-		case ALNotificationParameterError:
-			[[ALAppDelegate sharedAppDelegate] didClickPreferences:self];
-			break;
+	case ALNotificationURLCopied:
+		[ALUploadManager deleteUploadAtURL:[[notification userInfo] objectForKey:@"url"]];
+		break;
+	case ALNotificationOK:
+	case ALNotificationUploadError:
+		break;
+	case ALNotificationParameterError:
+		[[ALAppDelegate sharedAppDelegate] didClickPreferences:self];
+		break;
 	}
 }
 

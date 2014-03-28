@@ -7,6 +7,8 @@
 
 @interface ALUploadManager : NSObject <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
++ (void) deleteUploadAtURL:(NSString*)urlToDelete;
+
 - (void) uploadFileAtPath:(NSURL*)path;
 
 @end

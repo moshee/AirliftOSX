@@ -17,6 +17,7 @@ typedef enum {
 
 typedef enum {
 	ALNotificationURLCopied = 0,
+	ALNotificationOK,
 	ALNotificationUploadError,
 	ALNotificationParameterError
 } ALNotificationType;

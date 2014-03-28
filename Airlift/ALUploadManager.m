@@ -6,8 +6,6 @@
 #import "ALAppDelegate.h"
 
 @interface ALUploadManager () {
-	NSURL* uploadURL;
-	NSString* password;
 	NSMutableData* receivedData;
 	int responseCode;
 	ALAppDelegate* appDelegate;
@@ -20,37 +18,96 @@
 - (id) init {
 	self = [super init];
 	if (self != nil) {
-		NSString* host     = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
-		NSString* port     = [[NSUserDefaults standardUserDefaults] stringForKey:@"port"];
-		NSString* hostPort = [NSString stringWithFormat:@"%@:%@", host, port];
-		uploadURL          = [[NSURL URLWithString:hostPort] URLByAppendingPathComponent:@"/upload/file"];
-		password           = [ALPreferenceViewController retrievePasswordForHost:host];
-		appDelegate        = [ALAppDelegate sharedAppDelegate];
+		appDelegate = [ALAppDelegate sharedAppDelegate];
 	}
 	return self;
 }
 
-- (void) uploadFileAtPath:(NSURL*)path {
-	if (uploadURL == nil) {
++ (NSMutableURLRequest*) constructRequestToPath:(NSString*)path {
+	ALAppDelegate* appDelegate = [ALAppDelegate sharedAppDelegate];
+	NSString*      host        = [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
+
+	if ([host length] == 0) {
 		[appDelegate showNotificationOfType:ALNotificationParameterError
 									  title:@"Error"
 								   subtitle:@"A host has not been configured"
 							 additionalInfo:nil];
-		return;
+		return nil;
 	}
-	if (password == nil || [password length] == 0) {
+	
+	NSString* port     = [[NSUserDefaults standardUserDefaults] stringForKey:@"port"];
+	NSString* hostPort = [NSString stringWithFormat:@"%@:%@", host, port];
+	NSString* password = [ALPreferenceViewController retrievePasswordForHost:host];
+	
+	if ([password length] == 0) {
 		[appDelegate showNotificationOfType:ALNotificationParameterError
 									  title:@"Error"
 								   subtitle:@"A password has not been set for the configured host"
 							 additionalInfo:nil];
-		return;
+		return nil;
 	}
 	
-	NSString*            fileName  = [[path path] lastPathComponent];
-	NSMutableURLRequest* request   = [NSMutableURLRequest requestWithURL:uploadURL];
+	NSURL*               requestURL = [[NSURL URLWithString:hostPort] URLByAppendingPathComponent:path];
+	NSMutableURLRequest* request    = [NSMutableURLRequest requestWithURL:requestURL];
 	
 	[request setHTTPMethod:@"POST"];
 	[request setValue:password forHTTPHeaderField:@"X-Airlift-Password"];
+
+	return request;
+}
+
++ (void) deleteUploadAtURL:(NSString *)urlToDelete {
+	NSString* hash = [urlToDelete lastPathComponent];
+	NSMutableURLRequest* request = [ALUploadManager constructRequestToPath:[@"/" stringByAppendingString:hash]];
+	if (request == nil) {
+		return;
+	}
+	[request setHTTPMethod:@"DELETE"];
+	
+	void (^completionHandler)(NSData*, NSURLResponse*, NSError*);
+	
+	completionHandler = ^(NSData* data, NSURLResponse* response, NSError* error) {
+		NSString* title;
+		NSString* subtitle;
+		ALNotificationType notificationType;
+				
+		if (error != nil) {
+			title = [NSString stringWithFormat:@"Failed to delete %@", urlToDelete];
+			subtitle = [NSString stringWithFormat:@"Error performing request: %@", error];
+			notificationType = ALNotificationUploadError;
+		} else {
+			NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+			
+			if ([httpResponse statusCode] == 204) {
+				title = @"Deleted";
+				subtitle = [NSString stringWithFormat:@"Successfully deleted %@", urlToDelete];
+				notificationType = ALNotificationOK;
+			} else {
+				title = [NSString stringWithFormat:@"Failed to delete %@", urlToDelete];
+				subtitle = [NSString stringWithFormat:@"Server returned status: %ld", [httpResponse statusCode]];
+				notificationType = ALNotificationUploadError;
+			}
+		}
+		
+		[[ALAppDelegate sharedAppDelegate] showNotificationOfType:notificationType
+															title:title
+														 subtitle:subtitle
+												   additionalInfo:nil];
+	};
+	
+	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithRequest:request
+																 completionHandler:completionHandler];
+	[task resume];
+}
+
+- (void) uploadFileAtPath:(NSURL*)path {
+	NSMutableURLRequest* request = [ALUploadManager constructRequestToPath:@"/upload/file"];
+
+	if (request == nil) {
+		return;
+	}
+	
+	NSString* fileName = [[path path] lastPathComponent];
 	[request setValue:fileName forHTTPHeaderField:@"X-Airlift-Filename"];
 		
 	NSURLSession*           session = [NSURLSession sessionWithConfiguration:nil delegate:self delegateQueue:nil];
@@ -59,10 +116,9 @@
 	[upload resume];
 }
 
-
-- (void) presentURL:(NSDictionary*)jsonResponse {
-	NSString* linkableURL = [NSString stringWithFormat:@"%@://%@", [uploadURL scheme], [jsonResponse valueForKey:@"URL"]];
-	
+- (void) presentURL:(NSDictionary*)jsonResponse withOriginalURL:(NSURL*)originalURL {
+	NSString* linkableURL = [NSString stringWithFormat:@"%@://%@", [originalURL scheme], [jsonResponse valueForKey:@"URL"]];
+		
 	NSString* errMsg = copyString(linkableURL);
 	if (errMsg != nil) {
 		[appDelegate showNotificationOfType:ALNotificationUploadError
@@ -72,8 +128,8 @@
 	} else {
 		NSDictionary* info = [NSDictionary dictionaryWithObject:linkableURL forKey:@"url"];
 		[appDelegate showNotificationOfType:ALNotificationURLCopied
-									  title:linkableURL
-								   subtitle:@"URL copied to clipboard"
+									  title:[linkableURL stringByAppendingString:@" copied"]
+								   subtitle:@"Click this notification to delete it"
 							 additionalInfo:info];
 	}
 }
@@ -85,7 +141,7 @@ NSString* copyString(NSString* str) {
         return @"Failed to get handle on pasteboard";
     }
 	
-    [pboard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
+    [pboard declareTypes:@[NSPasteboardTypeString] owner:nil];
     [pboard clearContents];
 	
     NSString* msg;
@@ -110,7 +166,6 @@ NSString* copyString(NSString* str) {
 	 totalBytesSent:(int64_t)totalBytesSent
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 	
-	//NSLog(@"Progress: %d%%", (int)roundf(100 * ((float)totalBytesSent / (float)totalBytesExpectedToSend)));
 	CGFloat progress = (CGFloat)totalBytesSent / (CGFloat)totalBytesExpectedToSend;
 	[[appDelegate dropZone] setProgress:progress];
 }
@@ -148,7 +203,7 @@ didCompleteWithError:(NSError *)error {
 		return;
 	}
 	
-	[self presentURL:jsonResponse];
+	[self presentURL:jsonResponse withOriginalURL:[[task originalRequest] URL]];
 }
 
 #pragma mark - NSURLSessionDataDelegate
