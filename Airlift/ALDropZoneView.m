@@ -16,6 +16,11 @@
 
 @implementation ALDropZoneView
 
+static NSImage* StatusIcon;
+static NSImage* StatusIconDrag;
+static NSImage* StatusIconSelected;
+static NSImage* StatusIconUploading;
+
 - (id)initWithMenu:(NSMenu*)menu {
 	NSStatusItem* item =
 	    [[NSStatusBar systemStatusBar] statusItemWithLength:24.0];
@@ -23,6 +28,13 @@
 	CGFloat itemHeight = [[NSStatusBar systemStatusBar] thickness];
 	NSRect itemRect = NSMakeRect(0.0, 0.0, itemWidth, itemHeight);
 	self = [super initWithFrame:itemRect];
+
+	if (StatusIcon == nil) {
+		StatusIcon = [NSImage imageNamed:@"StatusIcon"];
+		StatusIconDrag = [NSImage imageNamed:@"StatusIconDrag"];
+		StatusIconSelected = [NSImage imageNamed:@"StatusIconSelected"];
+		StatusIconUploading = [NSImage imageNamed:@"StatusIconUploading"];
+	}
 
 	if (self) {
 		statusItem = item;
@@ -46,16 +58,16 @@
 	NSImage* statusIcon;
 	switch (status) {
 	case ALDropZoneStatusNormal:
-		statusIcon = [NSImage imageNamed:@"StatusIcon"];
+		statusIcon = StatusIcon;
 		break;
 	case ALDropZoneStatusDrag:
-		statusIcon = [NSImage imageNamed:@"StatusIconDrag"];
+		statusIcon = StatusIconDrag;
 		break;
 	case ALDropZoneStatusSelected:
-		statusIcon = [NSImage imageNamed:@"StatusIconSelected"];
+		statusIcon = StatusIconSelected;
 		break;
 	case ALDropZoneStatusUploading:
-		statusIcon = [NSImage imageNamed:@"StatusIconUploading"];
+		statusIcon = StatusIconUploading;
 		break;
 	}
 
@@ -71,21 +83,20 @@
 	               fraction:1.0];
 
 	if (status == ALDropZoneStatusUploading) {
-		NSImage* overlay = [NSImage imageNamed:@"StatusIcon"];
-		iconSize = [overlay size];
+		iconSize = [StatusIcon size];
 		CGFloat p = progress * iconSize.height;
 		NSRect mask = NSMakeRect(0, 0, iconSize.width, p);
 
-		[overlay drawAtPoint:iconPoint
-		            fromRect:mask
-		           operation:NSCompositeDestinationAtop
-		            fraction:1.0];
+		[StatusIcon drawAtPoint:iconPoint
+		               fromRect:mask
+		              operation:NSCompositeDestinationAtop
+		               fraction:1.0];
 	}
 }
 
 - (void)setStatus:(ALDropZoneStatus)_status {
 	status = _status;
-	self.needsDisplay = YES;
+	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseDown:(NSEvent*)theEvent {
