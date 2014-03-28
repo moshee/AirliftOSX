@@ -74,11 +74,12 @@
 		NSImage* overlay = [NSImage imageNamed:@"StatusIcon"];
 		iconSize = [overlay size];
 		CGFloat p = progress * iconSize.height;
-
 		NSRect mask = NSMakeRect(0, 0, iconSize.width, p);
-		[overlay compositeToPoint:iconPoint
-		                 fromRect:mask
-		                operation:NSCompositeDestinationAtop];
+
+		[overlay drawAtPoint:iconPoint
+		            fromRect:mask
+		           operation:NSCompositeDestinationAtop
+		            fraction:1.0];
 	}
 }
 
