@@ -99,9 +99,9 @@
 	}
 }
 
-- (void) userNotificationCenter:(NSUserNotificationCenter *)center
-		 didDeliverNotification:(NSUserNotification *)notification {
-	
+- (BOOL) userNotificationCenter:(NSUserNotificationCenter *)center
+	  shouldPresentNotification:(NSUserNotification *)notification {
+	return YES;
 }
 
 #pragma mark - Hotkey handling
