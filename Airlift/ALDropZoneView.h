@@ -8,7 +8,7 @@
 @interface ALDropZoneView : NSView <NSMenuDelegate, NSDraggingDestination>
 
 //- (id) initWithViewController:(NSViewController*)controller;
-- (id)initWithMenu:(NSMenu *)menu;
+- (id)initWithMenu:(NSMenu*)menu;
 
 //- (void) showPopover;
 //- (void) hidePopover;

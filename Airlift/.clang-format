@@ -1,0 +1,22 @@
+---
+BasedOnStyle:  WebKit
+AllowShortFunctionsOnASingleLine: false
+ColumnLimit:     80
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 10
+PenaltyBreakString: 10000
+PenaltyBreakFirstLessLess: 120
+PenaltyExcessCharacter: 10
+PenaltyReturnTypeOnItsOwnLine: 0
+IndentWidth:     4
+TabWidth:        4
+UseTab:          ForIndentation
+BreakBeforeBraces: Attach
+SpacesInParentheses: false
+SpacesInAngles:  false
+SpaceInEmptyParentheses: false
+SpacesInCStyleCastParentheses: false
+SpacesInContainerLiterals: false
+CommentPragmas:  ''
+...
+
