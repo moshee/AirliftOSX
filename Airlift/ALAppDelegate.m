@@ -20,7 +20,7 @@
 	             bundle:nil];
 
 	menu = [[NSMenu alloc] init];
-	[menu addItemWithTitle:@"Preferences..."
+	[menu addItemWithTitle:@"Settings..."
 	                action:@selector(didClickPreferences:)
 	         keyEquivalent:@""];
 	[menu addItem:[NSMenuItem separatorItem]];
@@ -32,7 +32,7 @@
 	[_window setContentView:[prefs view]];
 	[_window setReleasedWhenClosed:NO];
 	[_window center];
-	[_window setTitle:@"Connection details"];
+	[_window setTitle:@"Airlift settings"];
 	[_window setLevel:NSFloatingWindowLevel];
 
 	EventHotKeyRef hotKeyRef;
@@ -141,7 +141,10 @@
 		return;
 	}
 
-	[[ALUploadManager new] uploadFileAtPath:[NSURL fileURLWithPath:tempFilePath]];
+	NSURL* fileURL = [NSURL fileURLWithPath:tempFilePath];
+	ALUploadManager* upload = [[ALUploadManager alloc] initWithFileURL:fileURL];
+	[[[ALAppDelegate sharedAppDelegate] dropZone] setCurrentUpload:upload];
+	[upload doUpload];
 }
 
 OSStatus

@@ -3,8 +3,11 @@
 // license that can be found in the LICENSE file.
 
 #import <Cocoa/Cocoa.h>
+#import "ALUploadManager.h"
 
 @interface ALDropZoneView : NSView <NSMenuDelegate, NSDraggingDestination>
+
+@property (retain) ALUploadManager* currentUpload;
 
 - (id)initWithMenu:(NSMenu*)menu;
 

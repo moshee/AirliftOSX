@@ -10,16 +10,36 @@
 	NSMutableData* receivedData;
 	int responseCode;
 	ALAppDelegate* appDelegate;
+	NSURL* targetFilePath;
+	NSURLSessionUploadTask* upload;
 }
 
 @end
 
 @implementation ALUploadManager
 
-- (id)init {
+- (id)initWithFileURL:(NSURL*)fileURL {
 	self = [super init];
 	if (self != nil) {
 		appDelegate = [ALAppDelegate sharedAppDelegate];
+
+		targetFilePath = fileURL;
+		NSMutableURLRequest* request =
+		    [ALUploadManager constructRequestToPath:@"/upload/file"];
+
+		if (request == nil) {
+			return nil;
+		}
+
+		NSString* fileName = [[targetFilePath path] lastPathComponent];
+		[request setValue:fileName forHTTPHeaderField:@"X-Airlift-Filename"];
+
+		session = [NSURLSession sessionWithConfiguration:nil
+		                                        delegate:self
+		                                   delegateQueue:nil];
+
+		upload =
+		    [session uploadTaskWithRequest:request fromFile:targetFilePath];
 	}
 	return self;
 }
@@ -205,24 +225,8 @@
 	[task resume];
 }
 
-- (void)uploadFileAtPath:(NSURL*)path {
-	NSLog(@"Going to upload %@", path);
-
-	NSMutableURLRequest* request =
-	    [ALUploadManager constructRequestToPath:@"/upload/file"];
-
-	if (request == nil) {
-		return;
-	}
-
-	NSString* fileName = [[path path] lastPathComponent];
-	[request setValue:fileName forHTTPHeaderField:@"X-Airlift-Filename"];
-
-	session = [NSURLSession sessionWithConfiguration:nil
-	                                        delegate:self
-	                                   delegateQueue:nil];
-	NSURLSessionUploadTask* upload =
-	    [session uploadTaskWithRequest:request fromFile:path];
+- (void)doUpload {
+	NSLog(@"Going to upload %@", targetFilePath);
 
 	[[appDelegate dropZone] addStatus:ALDropZoneStatusUploading];
 	[upload resume];
@@ -236,7 +240,15 @@
 	[[appDelegate dropZone] removeStatus:ALDropZoneStatusUploading];
 }
 
-- (void)presentURL:(NSString*)url withOriginalURL:(NSURL*)originalURL {
+- (void)presentURL:(NSString*)url {
+
+	if ([[NSUserDefaults standardUserDefaults]
+	        boolForKey:@"appendExtensions"]) {
+		NSString* ext = [[targetFilePath path] pathExtension];
+		url = [url stringByAppendingPathExtension:ext];
+	}
+
+	NSURL* originalURL = [[upload originalRequest] URL];
 	NSString* linkableURL =
 	    [NSString stringWithFormat:@"%@://%@", [originalURL scheme], url];
 
@@ -256,8 +268,8 @@
 		NSDictionary* info =
 		    [NSDictionary dictionaryWithObject:linkableURL forKey:@"url"];
 		[appDelegate showNotificationOfType:ALNotificationURLCopied
-		                              title:[linkableURL stringByAppendingString:@" copied"]
-		                           subtitle:nil
+		                              title:linkableURL
+		                           subtitle:@"URL copied to clipboard"
 		                     additionalInfo:info];
 	}
 }
@@ -350,7 +362,7 @@ NSString* copyString(NSString* str) {
 
 	NSString* gotURL = [jsonResponse objectForKey:@"URL"];
 	NSLog(@"Request successful - got URL: %@", gotURL);
-	[self presentURL:gotURL withOriginalURL:[[task originalRequest] URL]];
+	[self presentURL:gotURL];
 }
 
 #pragma mark - NSURLSessionDataDelegate

@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #import "ALDropZoneView.h"
-#import "ALUploadManager.h"
 #import "ALAppDelegate.h"
 
 @interface ALDropZoneView () {
@@ -13,12 +12,13 @@
 	NSMenuItem* progressMenuItem;
 	NSMenuItem* cancelUploadMenuItem;
 	NSMenuItem* oopsMenuItem;
-	ALUploadManager* currentUpload;
 }
 
 @end
 
 @implementation ALDropZoneView
+
+@synthesize currentUpload = _currentUpload;
 
 static NSImage* StatusIcon;
 static NSImage* StatusIconDrag;
@@ -155,7 +155,7 @@ static NSImage* StatusIconUploading;
 	if (_status == ALDropZoneStatusUploading) {
 		[progressMenuItem setHidden:YES];
 		[cancelUploadMenuItem setHidden:YES];
-		currentUpload = nil;
+		_currentUpload = nil;
 	}
 }
 
@@ -189,12 +189,12 @@ static NSImage* StatusIconUploading;
 #pragma mark - Menu actions
 
 - (void)cancelUpload:(id)sender {
-	if (currentUpload == nil) {
+	if (_currentUpload == nil) {
 		NSLog(@"Not cancelling upload because currentUpload is nil");
 		return;
 	}
 	NSLog(@"Cancelling current upload");
-	[currentUpload cancel];
+	[_currentUpload cancel];
 }
 
 - (void)oops:(id)sender {
@@ -226,8 +226,8 @@ static NSImage* StatusIconUploading;
 	[self removeStatus:ALDropZoneStatusDrag];
 	NSURL* filePath = [NSURL URLFromPasteboard:pboard];
 
-	currentUpload = [ALUploadManager new];
-	[currentUpload uploadFileAtPath:filePath];
+	_currentUpload = [[ALUploadManager alloc] initWithFileURL:filePath];
+	[_currentUpload doUpload];
 	return YES;
 }
 
