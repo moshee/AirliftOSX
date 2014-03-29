@@ -95,8 +95,9 @@
 			    [NSString stringWithFormat:@"Error performing request: %@", error];
 		} else {
 			NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+			NSInteger status = [httpResponse statusCode];
 
-			if ([httpResponse statusCode] == 204) {
+			if (status == 204 || status == 200) {
 				title = [NSString stringWithFormat:@"Deleted %@", urlToDelete];
 				notificationType = ALNotificationOK;
 			} else {
@@ -117,6 +118,77 @@
 					subtitle = [NSString
 					    stringWithFormat:@"Server returned error: %@",
 					                     [jsonResponse objectForKey:@"Err"]];
+				}
+			}
+		}
+
+		[[ALAppDelegate sharedAppDelegate] showNotificationOfType:notificationType
+		                                                    title:title
+		                                                 subtitle:subtitle
+		                                           additionalInfo:nil];
+	};
+
+	NSURLSessionDataTask* task =
+	    [[NSURLSession sharedSession] dataTaskWithRequest:request
+	                                    completionHandler:completionHandler];
+	[task resume];
+}
+
++ (void)oops {
+	NSLog(@"Going to delete last file uploaded");
+
+	NSMutableURLRequest* request =
+	    [ALUploadManager constructRequestToPath:@"/oops"];
+
+	void (^completionHandler)(NSData*, NSURLResponse*, NSError*);
+
+	completionHandler = ^(NSData* data, NSURLResponse* response, NSError* error) {
+		NSString* title;
+		NSString* subtitle;
+		ALNotificationType notificationType = ALNotificationUploadAborted;
+
+		if (error != nil) {
+			title = [NSString stringWithFormat:@"Failed to perform oops"];
+			subtitle =
+			    [NSString stringWithFormat:@"Error performing request: %@", error];
+		} else {
+			NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+			NSInteger status = [httpResponse statusCode];
+
+			// TODO: simplify logic once server API is more finalized
+			// currently, both 204 (no content) and 200 (ok) have to be handled
+			// because I just changed the 204 to 200 and return the URL of the
+			// deleted file because that's good
+			if (status == 204) {
+				title = [NSString stringWithFormat:@"Crisis averted"];
+				notificationType = ALNotificationOK;
+			} else {
+				error = nil;
+				NSDictionary* jsonResponse =
+				    [NSJSONSerialization JSONObjectWithData:data
+				                                    options:0
+				                                      error:&error];
+				if (error != nil) {
+					subtitle = [NSString
+					    stringWithFormat:@"Failed to parse server response "
+					                     @"(server returned status: %ld)",
+					                     [httpResponse statusCode]];
+				} else {
+					if (status == 200) {
+						title = [NSString stringWithFormat:@"Crisis averted"];
+						subtitle =
+						    [NSString
+						        stringWithFormat:@"Deleted file at %@",
+						                         [jsonResponse objectForKey:@"URL"]];
+						notificationType = ALNotificationOK;
+					} else {
+						title = [NSString
+						    stringWithFormat:@"Failed to perform oops"];
+						subtitle =
+						    [NSString
+						        stringWithFormat:@"Server returned error: %@",
+						                         [jsonResponse objectForKey:@"Err"]];
+					}
 				}
 			}
 		}
@@ -164,11 +236,9 @@
 	[[appDelegate dropZone] removeStatus:ALDropZoneStatusUploading];
 }
 
-- (void)presentURL:(NSDictionary*)jsonResponse
-    withOriginalURL:(NSURL*)originalURL {
+- (void)presentURL:(NSString*)url withOriginalURL:(NSURL*)originalURL {
 	NSString* linkableURL =
-	    [NSString stringWithFormat:@"%@://%@", [originalURL scheme],
-	                               [jsonResponse valueForKey:@"URL"]];
+	    [NSString stringWithFormat:@"%@://%@", [originalURL scheme], url];
 
 	NSString* errMsg = copyString(linkableURL);
 	if (errMsg != nil) {
@@ -237,6 +307,7 @@ NSString* copyString(NSString* str) {
 	[[appDelegate dropZone] removeStatus:ALDropZoneStatusUploading];
 
 	if (error != nil) {
+		NSLog(@"Request completed with error: %@", error);
 		NSString* title = nil;
 		NSString* subtitle = nil;
 		if ([error code] == NSURLErrorCancelled) {
@@ -279,7 +350,9 @@ NSString* copyString(NSString* str) {
 		return;
 	}
 
-	[self presentURL:jsonResponse withOriginalURL:[[task originalRequest] URL]];
+	NSString* gotURL = [jsonResponse objectForKey:@"URL"];
+	NSLog(@"Request successful - got URL: %@", gotURL);
+	[self presentURL:gotURL withOriginalURL:[[task originalRequest] URL]];
 }
 
 #pragma mark - NSURLSessionDataDelegate

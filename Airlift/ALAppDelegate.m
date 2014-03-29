@@ -98,8 +98,8 @@
 
 	switch (notificationType) {
 	case ALNotificationURLCopied:
-		[ALUploadManager
-		    deleteUploadAtURL:[[notification userInfo] objectForKey:@"url"]];
+		[[NSWorkspace sharedWorkspace]
+		    openURL:[NSURL URLWithString:[[notification userInfo] objectForKey:@"url"]]];
 		break;
 	case ALNotificationOK:
 	case ALNotificationUploadAborted:

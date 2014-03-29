@@ -18,3 +18,7 @@ Clicking on it should allow you to access the preferences; here, you need to set
 Then, you can drag files onto the icon, use `Opt+Shift+4` to capture and upload a screenshot with the familiar screencapture interface, or `Opt+Shift+3` to upload a shot of the entire screen.
 
 ![Dragging](https://i.ktkr.us/09Ns)
+
+While a file is uploading, a "cancel upload" item will appear; click it to cancel the upload.
+
+Clicking the "Oops!" item will delete the last item uploaded to the server.

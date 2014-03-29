@@ -12,6 +12,7 @@
 	CGFloat progress;
 	NSMenuItem* progressMenuItem;
 	NSMenuItem* cancelUploadMenuItem;
+	NSMenuItem* oopsMenuItem;
 	ALUploadManager* currentUpload;
 }
 
@@ -53,6 +54,16 @@ static NSImage* StatusIconUploading;
 		[cancelUploadMenuItem setTarget:self];
 		[cancelUploadMenuItem setHidden:YES];
 		[menu insertItem:cancelUploadMenuItem atIndex:1];
+
+		oopsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Oops!"
+		                                          action:@selector(oops:)
+		                                   keyEquivalent:@""];
+		[oopsMenuItem setTarget:self];
+		[oopsMenuItem setToolTip:@"In a crisis, you can click this to quickly "
+		              @"delete the last file uploaded."];
+
+		[menu insertItem:oopsMenuItem atIndex:2];
+		[menu insertItem:[NSMenuItem separatorItem] atIndex:3];
 
 		statusItem = item;
 		[statusItem setView:self];
@@ -175,6 +186,8 @@ static NSImage* StatusIconUploading;
 	}
 }
 
+#pragma mark - Menu actions
+
 - (void)cancelUpload:(id)sender {
 	if (currentUpload == nil) {
 		NSLog(@"Not cancelling upload because currentUpload is nil");
@@ -182,6 +195,10 @@ static NSImage* StatusIconUploading;
 	}
 	NSLog(@"Cancelling current upload");
 	[currentUpload cancel];
+}
+
+- (void)oops:(id)sender {
+	[ALUploadManager oops];
 }
 
 #pragma mark - Drag and drop
