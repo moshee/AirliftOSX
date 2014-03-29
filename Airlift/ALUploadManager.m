@@ -255,12 +255,10 @@
 	} else {
 		NSDictionary* info =
 		    [NSDictionary dictionaryWithObject:linkableURL forKey:@"url"];
-		[appDelegate
-		    showNotificationOfType:ALNotificationURLCopied
-		                     title:[linkableURL
-		                               stringByAppendingString:@" copied"]
-		                  subtitle:@"Click this notification to delete it"
-		            additionalInfo:info];
+		[appDelegate showNotificationOfType:ALNotificationURLCopied
+		                              title:[linkableURL stringByAppendingString:@" copied"]
+		                           subtitle:nil
+		                     additionalInfo:info];
 	}
 }
 
