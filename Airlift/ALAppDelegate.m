@@ -15,14 +15,18 @@
 @synthesize dropZone = _dropZone;
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
-	prefs = [[ALPreferenceViewController alloc]
-	    initWithNibName:@"ALPreferenceViewController"
-	             bundle:nil];
-
 	menu = [[NSMenu alloc] init];
 	[menu addItemWithTitle:@"Settings..."
 	                action:@selector(didClickPreferences:)
 	         keyEquivalent:@""];
+
+	NSMenuItem* checkUpdatesMenuItem =
+	    [[NSMenuItem alloc] initWithTitle:@"Check for updates..."
+	                               action:@selector(checkForUpdates:)
+	                        keyEquivalent:@""];
+	[checkUpdatesMenuItem setTarget:updater];
+	[menu addItem:checkUpdatesMenuItem];
+
 	[menu addItem:[NSMenuItem separatorItem]];
 	[menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
 
@@ -118,10 +122,12 @@
 #pragma mark - Hotkey handling
 
 + (void)uploadScreenshot:(NSArray*)additionalArgs {
-	NSString* fileName = [[NSDate date]
-	    descriptionWithCalendarFormat:@"Screenshot %Y-%m-%d at %H.%M.%S.png"
-	                         timeZone:nil
-	                           locale:[[NSUserDefaults standardUserDefaults] dictionaryRepresentation]];
+	NSString* format = @"Screenshot %Y-%m-%d at %H.%M.%S.png";
+	NSDictionary* locale =
+	    [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+	NSString* fileName = [[NSDate date] descriptionWithCalendarFormat:format
+	                                                         timeZone:nil
+	                                                           locale:locale];
 	NSString* tempFilePath =
 	    [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
 

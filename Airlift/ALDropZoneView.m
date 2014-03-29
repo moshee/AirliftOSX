@@ -27,7 +27,7 @@ static NSImage* StatusIconUploading;
 
 - (id)initWithMenu:(NSMenu*)menu {
 	NSStatusItem* item =
-	    [[NSStatusBar systemStatusBar] statusItemWithLength:24.0];
+	    [[NSStatusBar systemStatusBar] statusItemWithLength:28.0];
 	CGFloat itemWidth = [item length];
 	CGFloat itemHeight = [[NSStatusBar systemStatusBar] thickness];
 	NSRect itemRect = NSMakeRect(0.0, 0.0, itemWidth, itemHeight);
@@ -55,7 +55,7 @@ static NSImage* StatusIconUploading;
 		[cancelUploadMenuItem setHidden:YES];
 		[menu insertItem:cancelUploadMenuItem atIndex:1];
 
-		oopsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Oops!"
+		oopsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Delete last upload"
 		                                          action:@selector(oops:)
 		                                   keyEquivalent:@""];
 		[oopsMenuItem setTarget:self];

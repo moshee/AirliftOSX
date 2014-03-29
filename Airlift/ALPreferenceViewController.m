@@ -9,10 +9,10 @@
 
 static NSString* serviceName = @"airlift";
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (id)initWithCoder:(NSCoder*)aDecoder {
+	self = [super initWithCoder:aDecoder];
 
-	if (self) {
+	if (self != nil) {
 		NSString* host =
 		    [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
 		NSString* password =

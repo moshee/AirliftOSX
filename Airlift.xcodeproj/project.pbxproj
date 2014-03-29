@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E90AEE218E697E700A50247 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
+		4E90AEE518E697FC00A50247 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
+		4E90AEE918E76D2200A50247 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4E90AEE818E76D2200A50247 /* dsa_pub.pem */; };
 		4EF567EA18BA8C5F0060A66A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF567E918BA8C5F0060A66A /* Cocoa.framework */; };
 		4EF567F418BA8C5F0060A66A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EF567F218BA8C5F0060A66A /* InfoPlist.strings */; };
 		4EF567F618BA8C5F0060A66A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF567F518BA8C5F0060A66A /* main.m */; };
 		4EF567FD18BA8C5F0060A66A /* ALAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF567FC18BA8C5F0060A66A /* ALAppDelegate.m */; };
 		4EF5680018BA8C5F0060A66A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF567FE18BA8C5F0060A66A /* MainMenu.xib */; };
 		4EF5680218BA8C5F0060A66A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF5680118BA8C5F0060A66A /* Images.xcassets */; };
-		4EF5680918BA8C5F0060A66A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF5680818BA8C5F0060A66A /* XCTest.framework */; };
-		4EF5680A18BA8C5F0060A66A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF567E918BA8C5F0060A66A /* Cocoa.framework */; };
 		4EF5682518BA94000060A66A /* ALPreferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF5682318BA94000060A66A /* ALPreferenceViewController.m */; };
 		4EF5682618BA94000060A66A /* ALPreferenceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF5682418BA94000060A66A /* ALPreferenceViewController.xib */; };
 		4EF5682818BAA15B0060A66A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF5682718BAA15B0060A66A /* Security.framework */; };
@@ -23,17 +24,22 @@
 		4EF60A9D18E3F905003AB75F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF60A9C18E3F905003AB75F /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		4EF5680B18BA8C5F0060A66A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EF567DE18BA8C5F0060A66A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4EF567E518BA8C5F0060A66A;
-			remoteInfo = Airlift;
+/* Begin PBXCopyFilesBuildPhase section */
+		4E90AEE418E697F500A50247 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4E90AEE518E697FC00A50247 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXContainerItemProxy section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4E90AEE118E697E700A50247 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Airlift/Sparkle.framework; sourceTree = "<group>"; };
+		4E90AEE818E76D2200A50247 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		4EF567E618BA8C5F0060A66A /* Airlift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airlift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF567E918BA8C5F0060A66A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4EF567EC18BA8C5F0060A66A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -47,8 +53,6 @@
 		4EF567FC18BA8C5F0060A66A /* ALAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ALAppDelegate.m; sourceTree = "<group>"; };
 		4EF567FF18BA8C5F0060A66A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4EF5680118BA8C5F0060A66A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4EF5680718BA8C5F0060A66A /* AirliftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AirliftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4EF5680818BA8C5F0060A66A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4EF5682218BA94000060A66A /* ALPreferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALPreferenceViewController.h; sourceTree = "<group>"; };
 		4EF5682318BA94000060A66A /* ALPreferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALPreferenceViewController.m; sourceTree = "<group>"; };
 		4EF5682418BA94000060A66A /* ALPreferenceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ALPreferenceViewController.xib; sourceTree = "<group>"; };
@@ -68,15 +72,7 @@
 				4EF60A9D18E3F905003AB75F /* Carbon.framework in Frameworks */,
 				4EF5682818BAA15B0060A66A /* Security.framework in Frameworks */,
 				4EF567EA18BA8C5F0060A66A /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4EF5680418BA8C5F0060A66A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4EF5680A18BA8C5F0060A66A /* Cocoa.framework in Frameworks */,
-				4EF5680918BA8C5F0060A66A /* XCTest.framework in Frameworks */,
+				4E90AEE218E697E700A50247 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +93,6 @@
 			isa = PBXGroup;
 			children = (
 				4EF567E618BA8C5F0060A66A /* Airlift.app */,
-				4EF5680718BA8C5F0060A66A /* AirliftTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,10 +100,10 @@
 		4EF567E818BA8C5F0060A66A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4E90AEE118E697E700A50247 /* Sparkle.framework */,
 				4EF60A9C18E3F905003AB75F /* Carbon.framework */,
 				4EF5682718BAA15B0060A66A /* Security.framework */,
 				4EF567E918BA8C5F0060A66A /* Cocoa.framework */,
-				4EF5680818BA8C5F0060A66A /* XCTest.framework */,
 				4EF567EB18BA8C5F0060A66A /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -156,6 +151,7 @@
 		4EF5682918BADF3D0060A66A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4E90AEE818E76D2200A50247 /* dsa_pub.pem */,
 				4EF5682418BA94000060A66A /* ALPreferenceViewController.xib */,
 				4EF567FE18BA8C5F0060A66A /* MainMenu.xib */,
 			);
@@ -169,9 +165,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4EF5681718BA8C5F0060A66A /* Build configuration list for PBXNativeTarget "Airlift" */;
 			buildPhases = (
+				4E90AEE618E6980C00A50247 /* ShellScript */,
 				4EF567E218BA8C5F0060A66A /* Sources */,
 				4EF567E318BA8C5F0060A66A /* Frameworks */,
 				4EF567E418BA8C5F0060A66A /* Resources */,
+				4E90AEE418E697F500A50247 /* CopyFiles */,
+				4E90AEE718E6992200A50247 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -181,24 +180,6 @@
 			productName = Airlift;
 			productReference = 4EF567E618BA8C5F0060A66A /* Airlift.app */;
 			productType = "com.apple.product-type.application";
-		};
-		4EF5680618BA8C5F0060A66A /* AirliftTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4EF5681A18BA8C5F0060A66A /* Build configuration list for PBXNativeTarget "AirliftTests" */;
-			buildPhases = (
-				4EF5680318BA8C5F0060A66A /* Sources */,
-				4EF5680418BA8C5F0060A66A /* Frameworks */,
-				4EF5680518BA8C5F0060A66A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4EF5680C18BA8C5F0060A66A /* PBXTargetDependency */,
-			);
-			name = AirliftTests;
-			productName = AirliftTests;
-			productReference = 4EF5680718BA8C5F0060A66A /* AirliftTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -224,7 +205,6 @@
 			projectRoot = "";
 			targets = (
 				4EF567E518BA8C5F0060A66A /* Airlift */,
-				4EF5680618BA8C5F0060A66A /* AirliftTests */,
 			);
 		};
 /* End PBXProject section */
@@ -234,6 +214,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E90AEE918E76D2200A50247 /* dsa_pub.pem in Resources */,
 				4EF567F418BA8C5F0060A66A /* InfoPlist.strings in Resources */,
 				4EF5680218BA8C5F0060A66A /* Images.xcassets in Resources */,
 				4EF5682618BA94000060A66A /* ALPreferenceViewController.xib in Resources */,
@@ -241,14 +222,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4EF5680518BA8C5F0060A66A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4E90AEE618E6980C00A50247 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#!/bin/bash\n\n# This script automatically sets the version and short version string of\n# an Xcode project from the Git repository containing the project.\n#\n# To use this script in Xcode 4, add the contents to a \"Run Script\" build\n# phase for your application target.\n\nset -o errexit\nset -o nounset\n\n# First, check for git in $PATH\nhash git 2>/dev/null || { echo >&2 \"Git required, not installed.  Aborting build number update script.\"; exit 0; }\n\n# Alternatively, we could use Xcode's copy of the Git binary,\n# but old Xcodes don't have this.\n#GIT=$(xcrun -find git)\n\n# Run Script build phases that operate on product files of the target that defines them should use the value of this build setting [TARGET_BUILD_DIR]. But Run Script build phases that operate on product files of other targets should use “BUILT_PRODUCTS_DIR” instead.\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n\n# Build version (closest-tag-or-branch \"-\" commits-since-tag \"-\" short-hash dirty-flag)\nBUILD_VERSION=$(git describe --tags --always --dirty=+)\n\n# Use the latest tag for short version (expected tag format \"n[.n[.n]]\")\nLATEST_TAG=$(git describe --tags --abbrev=0)\nCOMMIT_COUNT_SINCE_TAG=$(git rev-list --count ${LATEST_TAG}..)\nif [ $LATEST_TAG = \"start\" ]; then\n    LATEST_TAG=0\nfi\n\nif [ $COMMIT_COUNT_SINCE_TAG = 0 ]; then\n    SHORT_VERSION=\"$LATEST_TAG\"\nelse\n# increment final digit of tag and append \"d\" + commit-count-since-tag\n# e.g. commit after 1.0 is 1.1d1, commit after 1.0.0 is 1.0.1d1\n# this is the bit that requires /bin/bash\n    OLD_IFS=$IFS\n    IFS=\".\"\n    VERSION_PARTS=($LATEST_TAG)\n    LAST_PART=$((${#VERSION_PARTS[@]}-1))\n    VERSION_PARTS[$LAST_PART]=$((${VERSION_PARTS[${LAST_PART}]}+1))\n    SHORT_VERSION=\"${VERSION_PARTS[*]}+${COMMIT_COUNT_SINCE_TAG}\"\n    IFS=$OLD_IFS\nfi\n    \n    # Bundle version (commits-on-master[-until-branch \".\" commits-on-branch])\n    # Assumes that two release branches will not diverge from the same commit on master.\nif [ $(git rev-parse --abbrev-ref HEAD) = \"master\" ]; then\n    MASTER_COMMIT_COUNT=$(git rev-list --count HEAD)\n    BRANCH_COMMIT_COUNT=0\n    BUNDLE_VERSION=\"$MASTER_COMMIT_COUNT\"\nelse\n    MASTER_COMMIT_COUNT=$(git rev-list --count $(git rev-list master.. | tail -n 1)^)\n    BRANCH_COMMIT_COUNT=$(git rev-list --count master..)\n    if [ $BRANCH_COMMIT_COUNT = 0 ]; then\n        BUNDLE_VERSION=\"$MASTER_COMMIT_COUNT\"\n    else\n        BUNDLE_VERSION=\"${MASTER_COMMIT_COUNT}.${BRANCH_COMMIT_COUNT}\"\n    fi\nfi\n    \n    defaults write \"$INFO_PLIST\" CFBundleBuildVersion       \"$BUILD_VERSION\"\n    defaults write \"$INFO_PLIST\" CFBundleShortVersionString \"$SHORT_VERSION\"\n    defaults write \"$INFO_PLIST\" CFBundleVersion            \"$BUNDLE_VERSION\"";
+			showEnvVarsInLog = 0;
 		};
-/* End PBXResourcesBuildPhase section */
+		4E90AEE718E6992200A50247 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#!/bin/bash\n\nif [ $CONFIGURATION != \"Release\" ]; then\n    exit 0\nfi\n\ncd \"$TARGET_BUILD_DIR\"\nzip -qr \"${PROJECT_DIR}/${WRAPPER_NAME%%$WRAPPER_SUFFIX}\" \"$WRAPPER_NAME\"";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4EF567E218BA8C5F0060A66A /* Sources */ = {
@@ -263,22 +268,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4EF5680318BA8C5F0060A66A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4EF5680C18BA8C5F0060A66A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4EF567E518BA8C5F0060A66A /* Airlift */;
-			targetProxy = 4EF5680B18BA8C5F0060A66A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4EF567F218BA8C5F0060A66A /* InfoPlist.strings */ = {
@@ -373,6 +363,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Airlift",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
 				INFOPLIST_FILE = "Airlift/Airlift-Info.plist";
@@ -387,48 +381,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Airlift",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
 				INFOPLIST_FILE = "Airlift/Airlift-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		4EF5681B18BA8C5F0060A66A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "AirliftTests/AirliftTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		4EF5681C18BA8C5F0060A66A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
-				INFOPLIST_FILE = "AirliftTests/AirliftTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -449,15 +411,6 @@
 			buildConfigurations = (
 				4EF5681818BA8C5F0060A66A /* Debug */,
 				4EF5681918BA8C5F0060A66A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4EF5681A18BA8C5F0060A66A /* Build configuration list for PBXNativeTarget "AirliftTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4EF5681B18BA8C5F0060A66A /* Debug */,
-				4EF5681C18BA8C5F0060A66A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

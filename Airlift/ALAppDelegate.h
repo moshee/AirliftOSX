@@ -8,11 +8,13 @@
 #import "ALDropZoneView.h"
 #import "ALUploadManager.h"
 #import "ALPreferenceViewController.h"
+#import "Sparkle.framework/Headers/Sparkle.h"
 
 @interface ALAppDelegate
     : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate> {
 @private
 	IBOutlet ALPreferenceViewController* prefs;
+	IBOutlet SUUpdater* updater;
 }
 
 @property (assign) IBOutlet NSWindow* window;
