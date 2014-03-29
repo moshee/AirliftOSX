@@ -4,14 +4,14 @@
 
 typedef enum {
 	ALDropZoneStatusNormal = 0,
-	ALDropZoneStatusDrag,
-	ALDropZoneStatusSelected,
-	ALDropZoneStatusUploading
+	ALDropZoneStatusDrag = 1 << 0,
+	ALDropZoneStatusSelected = 1 << 1,
+	ALDropZoneStatusUploading = 1 << 2
 } ALDropZoneStatus;
 
 typedef enum {
 	ALNotificationURLCopied = 0,
 	ALNotificationOK,
-	ALNotificationUploadError,
+	ALNotificationUploadAborted,
 	ALNotificationParameterError
 } ALNotificationType;

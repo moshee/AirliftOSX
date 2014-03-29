@@ -3,13 +3,16 @@
 // license that can be found in the LICENSE file.
 
 #import "ALDropZoneView.h"
+#import "ALUploadManager.h"
+#import "ALAppDelegate.h"
 
 @interface ALDropZoneView () {
 	NSStatusItem* statusItem;
-	NSPopover* popover;
 	int status;
-	id popoverTransiencyMonitor;
 	CGFloat progress;
+	NSMenuItem* progressMenuItem;
+	NSMenuItem* cancelUploadMenuItem;
+	ALUploadManager* currentUpload;
 }
 
 @end
@@ -37,12 +40,28 @@ static NSImage* StatusIconUploading;
 	}
 
 	if (self) {
+		progressMenuItem = [NSMenuItem new];
+		[progressMenuItem setTitle:@"Uploading..."];
+		[progressMenuItem setEnabled:NO];
+		[progressMenuItem setHidden:YES];
+		[menu insertItem:progressMenuItem atIndex:0];
+
+		cancelUploadMenuItem =
+		    [[NSMenuItem alloc] initWithTitle:@"Cancel upload"
+		                               action:@selector(cancelUpload:)
+		                        keyEquivalent:@""];
+		[cancelUploadMenuItem setTarget:self];
+		[cancelUploadMenuItem setHidden:YES];
+		[menu insertItem:cancelUploadMenuItem atIndex:1];
+
 		statusItem = item;
 		[statusItem setView:self];
 		[menu setDelegate:self];
-		[self setMenu:menu];
+		[statusItem setMenu:menu];
+
 		status = ALDropZoneStatusNormal;
 		progress = 0.0;
+
 		[self registerForDraggedTypes:@[NSFilenamesPboardType]];
 	}
 
@@ -52,23 +71,22 @@ static NSImage* StatusIconUploading;
 #pragma mark - UI
 
 - (void)drawRect:(NSRect)dirtyRect {
-	[statusItem drawStatusBarBackgroundInRect:dirtyRect
-	                            withHighlight:(status == ALDropZoneStatusSelected)];
+	[statusItem
+	    drawStatusBarBackgroundInRect:dirtyRect
+	                    withHighlight:([self hasStatus:ALDropZoneStatusSelected])];
 
 	NSImage* statusIcon;
-	switch (status) {
-	case ALDropZoneStatusNormal:
+
+	if (status == ALDropZoneStatusNormal) {
 		statusIcon = StatusIcon;
-		break;
-	case ALDropZoneStatusDrag:
-		statusIcon = StatusIconDrag;
-		break;
-	case ALDropZoneStatusSelected:
-		statusIcon = StatusIconSelected;
-		break;
-	case ALDropZoneStatusUploading:
-		statusIcon = StatusIconUploading;
-		break;
+	} else {
+		if ([self hasStatus:ALDropZoneStatusUploading]) {
+			statusIcon = StatusIconUploading;
+		} else if ([self hasStatus:ALDropZoneStatusSelected]) {
+			statusIcon = StatusIconSelected;
+		} else if ([self hasStatus:ALDropZoneStatusDrag]) {
+			statusIcon = StatusIconDrag;
+		}
 	}
 
 	NSSize iconSize = statusIcon.size;
@@ -82,55 +100,99 @@ static NSImage* StatusIconUploading;
 	              operation:NSCompositeSourceOver
 	               fraction:1.0];
 
-	if (status == ALDropZoneStatusUploading) {
-		iconSize = [StatusIcon size];
+	if ([self hasStatus:ALDropZoneStatusUploading]) {
+		NSImage* overlayIcon;
+
+		// For some reason, NSCompositeDestinationAtop doesn't work when using
+		// the selected icon state. Even though it's still transparent in all
+		// the same places. Possibly because it's white? Racist.
+		// Anyways, we have to invert the operation when drawing that.
+		NSCompositingOperation op;
+
+		if ([self hasStatus:ALDropZoneStatusSelected]) {
+			overlayIcon = StatusIconSelected;
+			op = NSCompositeHighlight;
+		} else {
+			overlayIcon = StatusIcon;
+			op = NSCompositeDestinationAtop;
+		}
+
+		iconSize = [overlayIcon size];
 		CGFloat p = progress * iconSize.height;
 		NSRect mask = NSMakeRect(0, 0, iconSize.width, p);
 
-		[StatusIcon drawAtPoint:iconPoint
-		               fromRect:mask
-		              operation:NSCompositeDestinationAtop
-		               fraction:1.0];
+		[overlayIcon drawAtPoint:iconPoint
+		                fromRect:mask
+		               operation:op
+		                fraction:1.0];
 	}
 }
 
-- (void)setStatus:(ALDropZoneStatus)_status {
-	status = _status;
+- (BOOL)hasStatus:(ALDropZoneStatus)_status {
+	return (status & _status) != 0;
+}
+
+- (void)addStatus:(ALDropZoneStatus)_status {
+	status |= _status;
 	[self setNeedsDisplay:YES];
 }
 
+- (void)removeStatus:(ALDropZoneStatus)_status {
+	status &= ~_status;
+	[self setNeedsDisplay:YES];
+
+	if (_status == ALDropZoneStatusUploading) {
+		[progressMenuItem setHidden:YES];
+		[cancelUploadMenuItem setHidden:YES];
+		currentUpload = nil;
+	}
+}
+
 - (void)mouseDown:(NSEvent*)theEvent {
-	if (status == ALDropZoneStatusNormal) {
-		[self setStatus:ALDropZoneStatusSelected];
+	if ([self hasStatus:ALDropZoneStatusSelected]) {
+		[self removeStatus:ALDropZoneStatusSelected];
 	} else {
-		[self setStatus:ALDropZoneStatusNormal];
+		[self addStatus:ALDropZoneStatusSelected];
 	}
 
-	if (status == ALDropZoneStatusSelected) {
-		[statusItem popUpStatusItemMenu:[self menu]];
+	if ([self hasStatus:ALDropZoneStatusSelected]) {
+		[statusItem popUpStatusItemMenu:[statusItem menu]];
 	}
 }
 
 - (void)menuDidClose:(NSMenu*)menu {
-	[self setStatus:ALDropZoneStatusNormal];
+	[self removeStatus:ALDropZoneStatusSelected];
 }
-
-#pragma mark - Uploading
 
 - (void)setProgress:(CGFloat)_progress {
 	progress = _progress;
 	[self setNeedsDisplay:YES];
+
+	if ([self hasStatus:ALDropZoneStatusUploading]
+	        && [progressMenuItem isHidden]) {
+		[progressMenuItem setHidden:NO];
+		[cancelUploadMenuItem setHidden:NO];
+	}
+}
+
+- (void)cancelUpload:(id)sender {
+	if (currentUpload == nil) {
+		NSLog(@"Not cancelling upload because currentUpload is nil");
+		return;
+	}
+	NSLog(@"Cancelling current upload");
+	[currentUpload cancel];
 }
 
 #pragma mark - Drag and drop
 
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-	[self setStatus:ALDropZoneStatusDrag];
+	[self addStatus:ALDropZoneStatusDrag];
 	return NSDragOperationCopy;
 }
 
 - (void)draggingExited:(id<NSDraggingInfo>)sender {
-	[self setStatus:ALDropZoneStatusNormal];
+	[self removeStatus:ALDropZoneStatusDrag];
 }
 
 - (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {
@@ -138,16 +200,17 @@ static NSImage* StatusIconUploading;
 }
 
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-	[self setStatus:ALDropZoneStatusNormal];
-	NSURL* filePath = [NSURL URLFromPasteboard:[sender draggingPasteboard]];
+	NSPasteboard* pboard = [sender draggingPasteboard];
 
-	if (filePath == nil) {
+	if (![[pboard types] containsObject:NSFilenamesPboardType]) {
 		return NO;
 	}
 
-	[self setStatus:ALDropZoneStatusUploading];
-	[[ALUploadManager new] uploadFileAtPath:filePath];
+	[self removeStatus:ALDropZoneStatusDrag];
+	NSURL* filePath = [NSURL URLFromPasteboard:pboard];
 
+	currentUpload = [ALUploadManager new];
+	[currentUpload uploadFileAtPath:filePath];
 	return YES;
 }
 

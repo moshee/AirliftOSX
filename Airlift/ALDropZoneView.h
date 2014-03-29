@@ -3,16 +3,15 @@
 // license that can be found in the LICENSE file.
 
 #import <Cocoa/Cocoa.h>
-#import "ALUploadManager.h"
 
 @interface ALDropZoneView : NSView <NSMenuDelegate, NSDraggingDestination>
 
-//- (id) initWithViewController:(NSViewController*)controller;
 - (id)initWithMenu:(NSMenu*)menu;
 
-//- (void) showPopover;
-//- (void) hidePopover;
-- (void)setStatus:(ALDropZoneStatus)status;
+- (void)addStatus:(ALDropZoneStatus)status;
+- (BOOL)hasStatus:(ALDropZoneStatus)status;
+- (void)removeStatus:(ALDropZoneStatus)status;
+
 - (void)setProgress:(CGFloat)progress;
 
 @end

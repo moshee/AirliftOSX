@@ -209,11 +209,6 @@
 				CLASSPREFIX = AL;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "display: none;";
-				TargetAttributes = {
-					4EF5680618BA8C5F0060A66A = {
-						TestTargetID = 4EF567E518BA8C5F0060A66A;
-					};
-				};
 			};
 			buildConfigurationList = 4EF567E118BA8C5F0060A66A /* Build configuration list for PBXProject "Airlift" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -382,6 +377,7 @@
 				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
 				INFOPLIST_FILE = "Airlift/Airlift-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -395,6 +391,7 @@
 				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
 				INFOPLIST_FILE = "Airlift/Airlift-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -402,7 +399,6 @@
 		4EF5681B18BA8C5F0060A66A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Airlift.app/Contents/MacOS/Airlift";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -416,7 +412,6 @@
 				);
 				INFOPLIST_FILE = "AirliftTests/AirliftTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -424,7 +419,6 @@
 		4EF5681C18BA8C5F0060A66A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Airlift.app/Contents/MacOS/Airlift";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -434,7 +428,6 @@
 				GCC_PREFIX_HEADER = "Airlift/Airlift-Prefix.pch";
 				INFOPLIST_FILE = "AirliftTests/AirliftTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;

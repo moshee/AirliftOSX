@@ -6,6 +6,7 @@
 #import "ALAppDelegate.h"
 
 @interface ALUploadManager () {
+	NSURLSession* session;
 	NSMutableData* receivedData;
 	int responseCode;
 	ALAppDelegate* appDelegate;
@@ -36,23 +37,30 @@
 		return nil;
 	}
 
-	NSString* port =
-	    [[NSUserDefaults standardUserDefaults] stringForKey:@"port"];
-	NSString* hostPort = [NSString stringWithFormat:@"%@:%@", host, port];
 	NSString* password =
 	    [ALPreferenceViewController retrievePasswordForHost:host];
 
 	if ([password length] == 0) {
 		[appDelegate showNotificationOfType:ALNotificationParameterError
 		                              title:@"Error"
-		                           subtitle:@"A password has not been set for "
-		                                    @"the configured host"
+		                           subtitle:@"A password has not been set for " @"the configured host"
 		                     additionalInfo:nil];
 		return nil;
 	}
 
+	NSURL* parsedHost = [NSURL URLWithString:host];
+	NSString* port =
+	    [[NSUserDefaults standardUserDefaults] stringForKey:@"port"];
+
+	NSString* hostPort =
+	    [NSString stringWithFormat:@"%@://%@:%@%@", [parsedHost scheme],
+	                               [parsedHost host], port, [parsedHost path]];
+
 	NSURL* requestURL =
 	    [[NSURL URLWithString:hostPort] URLByAppendingPathComponent:path];
+
+	NSLog(@"Trying to send request to %@", requestURL);
+
 	NSMutableURLRequest* request =
 	    [NSMutableURLRequest requestWithURL:requestURL];
 
@@ -63,6 +71,8 @@
 }
 
 + (void)deleteUploadAtURL:(NSString*)urlToDelete {
+	NSLog(@"Going to delete %@", urlToDelete);
+
 	NSString* hash = [urlToDelete lastPathComponent];
 	NSMutableURLRequest* request =
 	    [ALUploadManager constructRequestToPath:[@"/" stringByAppendingString:hash]];
@@ -76,7 +86,7 @@
 	completionHandler = ^(NSData* data, NSURLResponse* response, NSError* error) {
 		NSString* title;
 		NSString* subtitle;
-		ALNotificationType notificationType = ALNotificationUploadError;
+		ALNotificationType notificationType = ALNotificationUploadAborted;
 
 		if (error != nil) {
 			title =
@@ -124,6 +134,8 @@
 }
 
 - (void)uploadFileAtPath:(NSURL*)path {
+	NSLog(@"Going to upload %@", path);
+
 	NSMutableURLRequest* request =
 	    [ALUploadManager constructRequestToPath:@"/upload/file"];
 
@@ -134,13 +146,22 @@
 	NSString* fileName = [[path path] lastPathComponent];
 	[request setValue:fileName forHTTPHeaderField:@"X-Airlift-Filename"];
 
-	NSURLSession* session = [NSURLSession sessionWithConfiguration:nil
-	                                                      delegate:self
-	                                                 delegateQueue:nil];
+	session = [NSURLSession sessionWithConfiguration:nil
+	                                        delegate:self
+	                                   delegateQueue:nil];
 	NSURLSessionUploadTask* upload =
 	    [session uploadTaskWithRequest:request fromFile:path];
 
+	[[appDelegate dropZone] addStatus:ALDropZoneStatusUploading];
 	[upload resume];
+}
+
+- (void)cancel {
+	if (session == nil) {
+		return;
+	}
+	[session invalidateAndCancel];
+	[[appDelegate dropZone] removeStatus:ALDropZoneStatusUploading];
 }
 
 - (void)presentURL:(NSDictionary*)jsonResponse
@@ -156,7 +177,7 @@
 		                               @"the URL to clipboard: %@",
 		                               errMsg];
 		[appDelegate
-		    showNotificationOfType:ALNotificationUploadError
+		    showNotificationOfType:ALNotificationUploadAborted
 		                     title:[NSString
 		                               stringWithFormat:@"Error copying %@", linkableURL]
 		                  subtitle:subtitle
@@ -213,12 +234,20 @@ NSString* copyString(NSString* str) {
                     task:(NSURLSessionTask*)task
     didCompleteWithError:(NSError*)error {
 
-	[[appDelegate dropZone] setStatus:ALDropZoneStatusNormal];
+	[[appDelegate dropZone] removeStatus:ALDropZoneStatusUploading];
 
 	if (error != nil) {
-		[appDelegate showNotificationOfType:ALNotificationUploadError
-		                              title:@"Error uploading"
-		                           subtitle:[error description]
+		NSString* title = nil;
+		NSString* subtitle = nil;
+		if ([error code] == NSURLErrorCancelled) {
+			title = @"Upload cancelled";
+		} else {
+			title = @"Error uploading";
+			subtitle = [error description];
+		}
+		[appDelegate showNotificationOfType:ALNotificationUploadAborted
+		                              title:title
+		                           subtitle:subtitle
 		                     additionalInfo:nil];
 		return;
 	}
@@ -231,7 +260,7 @@ NSString* copyString(NSString* str) {
 		NSString* subtitle = [NSString
 		    stringWithFormat:@"Failed to decode server response (status %d)",
 		                     responseCode];
-		[appDelegate showNotificationOfType:ALNotificationUploadError
+		[appDelegate showNotificationOfType:ALNotificationUploadAborted
 		                              title:@"Error uploading"
 		                           subtitle:subtitle
 		                     additionalInfo:nil];
@@ -243,7 +272,7 @@ NSString* copyString(NSString* str) {
 		NSString* subtitle = [NSString
 		    stringWithFormat:@"server returned error: %@ (status %d)",
 		                     [jsonResponse valueForKey:@"Err"], responseCode];
-		[appDelegate showNotificationOfType:ALNotificationUploadError
+		[appDelegate showNotificationOfType:ALNotificationUploadAborted
 		                              title:@"Error uploading"
 		                           subtitle:subtitle
 		                     additionalInfo:nil];

@@ -23,6 +23,7 @@
 	[menu addItemWithTitle:@"Preferences..."
 	                action:@selector(didClickPreferences:)
 	         keyEquivalent:@""];
+	[menu addItem:[NSMenuItem separatorItem]];
 	[menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
 
 	_dropZone = [[ALDropZoneView alloc] initWithMenu:menu];
@@ -101,7 +102,7 @@
 		    deleteUploadAtURL:[[notification userInfo] objectForKey:@"url"]];
 		break;
 	case ALNotificationOK:
-	case ALNotificationUploadError:
+	case ALNotificationUploadAborted:
 		break;
 	case ALNotificationParameterError:
 		[[ALAppDelegate sharedAppDelegate] didClickPreferences:self];
