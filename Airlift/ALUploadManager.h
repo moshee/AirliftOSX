@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ALPreferenceViewController.h"
+#import "ALUploadHistoryItem.h"
 
 @interface ALUploadManager
     : NSObject <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>

@@ -12,6 +12,7 @@
 	NSMenuItem* progressMenuItem;
 	NSMenuItem* cancelUploadMenuItem;
 	NSMenuItem* oopsMenuItem;
+	NSMenu* uploadHistoryMenu;
 }
 
 @end
@@ -24,6 +25,8 @@ static NSImage* StatusIcon;
 static NSImage* StatusIconDrag;
 static NSImage* StatusIconSelected;
 static NSImage* StatusIconUploading;
+
+static NSMenuItem* emptyUploadHistoryItem;
 
 - (id)initWithMenu:(NSMenu*)menu {
 	NSStatusItem* item =
@@ -38,6 +41,12 @@ static NSImage* StatusIconUploading;
 		StatusIconDrag = [NSImage imageNamed:@"StatusIconDrag"];
 		StatusIconSelected = [NSImage imageNamed:@"StatusIconSelected"];
 		StatusIconUploading = [NSImage imageNamed:@"StatusIconUploading"];
+	}
+
+	if (emptyUploadHistoryItem == nil) {
+		emptyUploadHistoryItem = [NSMenuItem new];
+		[emptyUploadHistoryItem setTitle:@"(No uploads)"];
+		[emptyUploadHistoryItem setEnabled:NO];
 	}
 
 	if (self) {
@@ -63,7 +72,16 @@ static NSImage* StatusIconUploading;
 		              @"delete the last file uploaded."];
 
 		[menu insertItem:oopsMenuItem atIndex:2];
-		[menu insertItem:[NSMenuItem separatorItem] atIndex:3];
+
+		NSMenuItem* uploadHistoryMenuItem = [NSMenuItem new];
+		[uploadHistoryMenuItem setTitle:@"Past uploads"];
+
+		uploadHistoryMenu = [NSMenu new];
+		[self setHistoryItems:nil];
+		[uploadHistoryMenuItem setSubmenu:uploadHistoryMenu];
+		[menu insertItem:uploadHistoryMenuItem atIndex:3];
+
+		[menu insertItem:[NSMenuItem separatorItem] atIndex:4];
 
 		statusItem = item;
 		[statusItem setView:self];
@@ -183,6 +201,39 @@ static NSImage* StatusIconUploading;
 	        && [progressMenuItem isHidden]) {
 		[progressMenuItem setHidden:NO];
 		[cancelUploadMenuItem setHidden:NO];
+	}
+}
+
+- (void)setHistoryItems:(NSArray*)historyItems {
+	[uploadHistoryMenu removeAllItems];
+	if (historyItems == nil || [historyItems count] == 0) {
+		[uploadHistoryMenu addItem:emptyUploadHistoryItem];
+		return;
+	}
+
+	for (ALUploadHistoryItem* historyItem in historyItems) {
+		NSMenuItem* menuItem = [NSMenuItem new];
+		NSString* title = [[historyItem filePath] lastPathComponent];
+		[menuItem setTitle:title];
+
+		NSMenuItem* copyItem =
+		    [[NSMenuItem alloc] initWithTitle:@"Copy link"
+		                               action:@selector(copyLink)
+		                        keyEquivalent:@""];
+		[copyItem setTarget:historyItem];
+
+		NSMenuItem* deleteItem =
+		    [[NSMenuItem alloc] initWithTitle:@"Delete upload"
+		                               action:@selector(deleteUpload)
+		                        keyEquivalent:@""];
+		[deleteItem setTarget:historyItem];
+
+		NSMenu* submenu = [NSMenu new];
+		[submenu addItem:copyItem];
+		[submenu addItem:deleteItem];
+		[menuItem setSubmenu:submenu];
+
+		[uploadHistoryMenu addItem:menuItem];
 	}
 }
 

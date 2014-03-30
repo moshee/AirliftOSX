@@ -4,6 +4,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ALUploadManager.h"
+#import "ALUploadHistoryItem.h"
 
 @interface ALDropZoneView : NSView <NSMenuDelegate, NSDraggingDestination>
 
@@ -14,6 +15,7 @@
 - (void)addStatus:(ALDropZoneStatus)status;
 - (BOOL)hasStatus:(ALDropZoneStatus)status;
 - (void)removeStatus:(ALDropZoneStatus)status;
+- (void)setHistoryItems:(NSArray*)historyItems;
 
 - (void)setProgress:(CGFloat)progress;
 

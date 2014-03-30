@@ -10,6 +10,7 @@
 		4E90AEE218E697E700A50247 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
 		4E90AEE518E697FC00A50247 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
 		4E90AEEB18E7CFE100A50247 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */; };
+		4E90AEF318E7EB4A00A50247 /* ALUploadHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */; };
 		4EF567EA18BA8C5F0060A66A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF567E918BA8C5F0060A66A /* Cocoa.framework */; };
 		4EF567F418BA8C5F0060A66A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EF567F218BA8C5F0060A66A /* InfoPlist.strings */; };
 		4EF567F618BA8C5F0060A66A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF567F518BA8C5F0060A66A /* main.m */; };
@@ -40,6 +41,8 @@
 /* Begin PBXFileReference section */
 		4E90AEE118E697E700A50247 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Airlift/Sparkle.framework; sourceTree = "<group>"; };
 		4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		4E90AEF118E7EB4A00A50247 /* ALUploadHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALUploadHistoryItem.h; sourceTree = "<group>"; };
+		4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALUploadHistoryItem.m; sourceTree = "<group>"; };
 		4EF567E618BA8C5F0060A66A /* Airlift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airlift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF567E918BA8C5F0060A66A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4EF567EC18BA8C5F0060A66A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -130,6 +133,8 @@
 				4EF5683118BB03B30060A66A /* ALDropZoneView.m */,
 				4EF60A9918E3751B003AB75F /* ALUploadManager.h */,
 				4EF60A9A18E3751B003AB75F /* ALUploadManager.m */,
+				4E90AEF118E7EB4A00A50247 /* ALUploadHistoryItem.h */,
+				4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */,
 				4EF5680118BA8C5F0060A66A /* Images.xcassets */,
 				4EF5682918BADF3D0060A66A /* Resources */,
 				4EF567F018BA8C5F0060A66A /* Supporting Files */,
@@ -261,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EF567F618BA8C5F0060A66A /* main.m in Sources */,
+				4E90AEF318E7EB4A00A50247 /* ALUploadHistoryItem.m in Sources */,
 				4EF567FD18BA8C5F0060A66A /* ALAppDelegate.m in Sources */,
 				4EF60A9B18E3751B003AB75F /* ALUploadManager.m in Sources */,
 				4EF5682518BA94000060A66A /* ALPreferenceViewController.m in Sources */,

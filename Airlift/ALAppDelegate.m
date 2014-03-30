@@ -6,13 +6,16 @@
 
 @interface ALAppDelegate () {
 	NSMenu* menu;
+	NSMutableArray* uploadHistory;
 }
 
 @end
 
 @implementation ALAppDelegate
 
-@synthesize dropZone = _dropZone;
+const NSUInteger MAX_UPLOAD_HISTORY = 10;
+
+@synthesize dropZone;
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
 	menu = [[NSMenu alloc] init];
@@ -30,7 +33,7 @@
 	[menu addItem:[NSMenuItem separatorItem]];
 	[menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
 
-	_dropZone = [[ALDropZoneView alloc] initWithMenu:menu];
+	dropZone = [[ALDropZoneView alloc] initWithMenu:menu];
 
 	[_window setContentSize:[[prefs view] frame].size];
 	[_window setContentView:[prefs view]];
@@ -92,6 +95,28 @@
 
 	[[NSUserNotificationCenter defaultUserNotificationCenter]
 	    deliverNotification:notification];
+}
+
+- (void)addUploadToHistory:(ALUploadHistoryItem*)historyItem {
+	if (uploadHistory == nil) {
+		uploadHistory = [NSMutableArray array];
+	}
+	if ([uploadHistory count] >= MAX_UPLOAD_HISTORY) {
+		[uploadHistory removeLastObject];
+	}
+
+	[historyItem copyLink];
+	[uploadHistory insertObject:historyItem atIndex:0];
+	[dropZone setHistoryItems:uploadHistory];
+}
+
+- (void)removeUploadFromHistory:(ALUploadHistoryItem*)historyItem {
+	[uploadHistory removeObject:historyItem];
+	[dropZone setHistoryItems:uploadHistory];
+}
+
+- (NSArray*)uploadHistory {
+	return (NSArray*)uploadHistory;
 }
 
 #pragma mark - NSUserNotificationCenterDelegate

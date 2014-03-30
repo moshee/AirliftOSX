@@ -8,6 +8,7 @@
 #import "ALDropZoneView.h"
 #import "ALUploadManager.h"
 #import "ALPreferenceViewController.h"
+#import "ALUploadHistoryItem.h"
 #import "Sparkle.framework/Headers/Sparkle.h"
 
 @interface ALAppDelegate
@@ -28,6 +29,8 @@
                          title:(NSString*)title
                       subtitle:(NSString*)subtitle
                 additionalInfo:(NSDictionary*)info;
+- (void)addUploadToHistory:(ALUploadHistoryItem*)upload;
+- (void)removeUploadFromHistory:(ALUploadHistoryItem*)upload;
 
 enum HotkeyAction { HotkeyTakeScreenshot = 0, HotkeyTakeFullScreenshot };
 

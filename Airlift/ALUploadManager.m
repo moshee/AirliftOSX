@@ -118,6 +118,7 @@
 			NSInteger status = [httpResponse statusCode];
 
 			if (status == 204 || status == 200) {
+				NSLog(@"Successfully deleted %@", urlToDelete);
 				title = [NSString stringWithFormat:@"Deleted %@", urlToDelete];
 				notificationType = ALNotificationOK;
 			} else {
@@ -130,6 +131,7 @@
 				                                    options:0
 				                                      error:&error];
 				if (error != nil) {
+					NSLog(@"Failed to parse JSON: %@", error);
 					subtitle = [NSString
 					    stringWithFormat:@"Failed to parse server response "
 					                     @"(server returned status: %ld)",
@@ -240,63 +242,6 @@
 	[[appDelegate dropZone] removeStatus:ALDropZoneStatusUploading];
 }
 
-- (void)presentURL:(NSString*)url {
-
-	if ([[NSUserDefaults standardUserDefaults]
-	        boolForKey:@"appendExtensions"]) {
-		NSString* ext = [[targetFilePath path] pathExtension];
-		url = [url stringByAppendingPathExtension:ext];
-	}
-
-	NSURL* originalURL = [[upload originalRequest] URL];
-	NSString* linkableURL =
-	    [NSString stringWithFormat:@"%@://%@", [originalURL scheme], url];
-
-	NSString* errMsg = copyString(linkableURL);
-	if (errMsg != nil) {
-		NSString* subtitle =
-		    [NSString stringWithFormat:@"The upload worked, but couldn't copy "
-		                               @"the URL to clipboard: %@",
-		                               errMsg];
-		[appDelegate
-		    showNotificationOfType:ALNotificationUploadAborted
-		                     title:[NSString
-		                               stringWithFormat:@"Error copying %@", linkableURL]
-		                  subtitle:subtitle
-		            additionalInfo:nil];
-	} else {
-		NSDictionary* info =
-		    [NSDictionary dictionaryWithObject:linkableURL forKey:@"url"];
-		[appDelegate showNotificationOfType:ALNotificationURLCopied
-		                              title:linkableURL
-		                           subtitle:@"URL copied to clipboard"
-		                     additionalInfo:info];
-	}
-}
-
-NSString* copyString(NSString* str) {
-	NSPasteboard* pboard = [NSPasteboard generalPasteboard];
-
-	if (pboard == nil) {
-		return @"Failed to get handle on pasteboard";
-	}
-
-	[pboard declareTypes:@[NSPasteboardTypeString] owner:nil];
-	[pboard clearContents];
-
-	NSString* msg;
-
-	@try {
-		if (![pboard writeObjects:[NSArray arrayWithObject:str]]) {
-			msg = @"Pasteboard ownership changed";
-		}
-	}
-	@catch (NSException* e) {
-		msg = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
-	}
-	return msg;
-}
-
 #pragma mark - NSURLSessionTaskDelegate
 
 - (void)URLSession:(NSURLSession*)session
@@ -362,7 +307,13 @@ NSString* copyString(NSString* str) {
 
 	NSString* gotURL = [jsonResponse objectForKey:@"URL"];
 	NSLog(@"Request successful - got URL: %@", gotURL);
-	[self presentURL:gotURL];
+
+	ALUploadHistoryItem* historyItem = [ALUploadHistoryItem new];
+	[historyItem setURL:gotURL];
+	[historyItem setOriginalURL:[[upload originalRequest] URL]];
+	[historyItem setFilePath:targetFilePath];
+
+	[appDelegate addUploadToHistory:historyItem];
 }
 
 #pragma mark - NSURLSessionDataDelegate
