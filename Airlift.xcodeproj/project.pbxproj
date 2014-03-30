@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E90AEE218E697E700A50247 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
-		4E90AEE518E697FC00A50247 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
 		4E90AEEB18E7CFE100A50247 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */; };
 		4E90AEF318E7EB4A00A50247 /* ALUploadHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */; };
 		4E90AEF618E877F400A50247 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E90AEF518E877F400A50247 /* ScriptingBridge.framework */; };
+		4E90B08218E8C98900A50247 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E90B07718E8C89B00A50247 /* Sparkle.framework */; };
 		4EF567EA18BA8C5F0060A66A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF567E918BA8C5F0060A66A /* Cocoa.framework */; };
 		4EF567F418BA8C5F0060A66A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EF567F218BA8C5F0060A66A /* InfoPlist.strings */; };
 		4EF567F618BA8C5F0060A66A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF567F518BA8C5F0060A66A /* main.m */; };
@@ -26,6 +25,51 @@
 		4EF60A9D18E3F905003AB75F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF60A9C18E3F905003AB75F /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4E90B07618E8C89B00A50247 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = Sparkle;
+		};
+		4E90B07818E8C89B00A50247 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 61B5F90209C4CEE200B25A18;
+			remoteInfo = "Sparkle Test App";
+		};
+		4E90B07A18E8C89B00A50247 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 612279D90DB5470200AB99EA;
+			remoteInfo = "Sparkle Unit Tests";
+		};
+		4E90B07C18E8C89B00A50247 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5D06E8D00FD68C7C005AE3F6;
+			remoteInfo = BinaryDelta;
+		};
+		4E90B07E18E8C89B00A50247 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 55C14BB7136EEF1500649790;
+			remoteInfo = finish_installation;
+		};
+		4E90B08018E8C98400A50247 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = Sparkle;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		4E90AEE418E697F500A50247 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -33,19 +77,18 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4E90AEE518E697FC00A50247 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4E90AEE118E697E700A50247 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Airlift/Sparkle.framework; sourceTree = "<group>"; };
 		4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		4E90AEF118E7EB4A00A50247 /* ALUploadHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALUploadHistoryItem.h; sourceTree = "<group>"; };
 		4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALUploadHistoryItem.m; sourceTree = "<group>"; };
 		4E90AEF418E8717600A50247 /* Finder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Finder.h; sourceTree = "<group>"; };
 		4E90AEF518E877F400A50247 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+		4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sparkle.xcodeproj; path = Sparkle/Sparkle.xcodeproj; sourceTree = "<group>"; };
 		4EF567E618BA8C5F0060A66A /* Airlift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airlift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF567E918BA8C5F0060A66A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4EF567EC18BA8C5F0060A66A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -75,20 +118,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E90B08218E8C98900A50247 /* Sparkle.framework in Frameworks */,
 				4E90AEF618E877F400A50247 /* ScriptingBridge.framework in Frameworks */,
 				4EF60A9D18E3F905003AB75F /* Carbon.framework in Frameworks */,
 				4EF5682818BAA15B0060A66A /* Security.framework in Frameworks */,
 				4EF567EA18BA8C5F0060A66A /* Cocoa.framework in Frameworks */,
-				4E90AEE218E697E700A50247 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E90B06F18E8C89A00A50247 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E90B07718E8C89B00A50247 /* Sparkle.framework */,
+				4E90B07918E8C89B00A50247 /* Sparkle Test App.app */,
+				4E90B07B18E8C89B00A50247 /* Sparkle Unit Tests.octest */,
+				4E90B07D18E8C89B00A50247 /* BinaryDelta */,
+				4E90B07F18E8C89B00A50247 /* Autoupdate.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4EF567DD18BA8C5F0060A66A = {
 			isa = PBXGroup;
 			children = (
+				4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */,
 				4EF567EF18BA8C5F0060A66A /* Airlift */,
 				4EF567E818BA8C5F0060A66A /* Frameworks */,
 				4EF567E718BA8C5F0060A66A /* Products */,
@@ -108,7 +164,6 @@
 			isa = PBXGroup;
 			children = (
 				4E90AEF518E877F400A50247 /* ScriptingBridge.framework */,
-				4E90AEE118E697E700A50247 /* Sparkle.framework */,
 				4EF60A9C18E3F905003AB75F /* Carbon.framework */,
 				4EF5682718BAA15B0060A66A /* Security.framework */,
 				4EF567E918BA8C5F0060A66A /* Cocoa.framework */,
@@ -186,6 +241,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4E90B08118E8C98400A50247 /* PBXTargetDependency */,
 			);
 			name = Airlift;
 			productName = Airlift;
@@ -209,16 +265,94 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
+				ca,
+				cs,
+				cy,
+				da,
+				de,
+				el,
+				es,
+				fi,
+				fr,
+				he,
+				hu,
+				id,
+				is,
+				it,
+				ja,
+				ko,
+				nl,
+				no,
+				pl,
+				"pt-BR",
+				pt_BR,
+				pt_PT,
+				ro,
+				ru,
+				sk,
+				sl,
+				sv,
+				English,
+				th,
+				tr,
+				uk,
+				zh_CN,
+				zh_TW,
 			);
 			mainGroup = 4EF567DD18BA8C5F0060A66A;
 			productRefGroup = 4EF567E718BA8C5F0060A66A /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4E90B06F18E8C89A00A50247 /* Products */;
+					ProjectRef = 4E90B06E18E8C89A00A50247 /* Sparkle.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4EF567E518BA8C5F0060A66A /* Airlift */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4E90B07718E8C89B00A50247 /* Sparkle.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Sparkle.framework;
+			remoteRef = 4E90B07618E8C89B00A50247 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4E90B07918E8C89B00A50247 /* Sparkle Test App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Sparkle Test App.app";
+			remoteRef = 4E90B07818E8C89B00A50247 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4E90B07B18E8C89B00A50247 /* Sparkle Unit Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Sparkle Unit Tests.octest";
+			remoteRef = 4E90B07A18E8C89B00A50247 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4E90B07D18E8C89B00A50247 /* BinaryDelta */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = BinaryDelta;
+			remoteRef = 4E90B07C18E8C89B00A50247 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4E90B07F18E8C89B00A50247 /* Autoupdate.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Autoupdate.app;
+			remoteRef = 4E90B07E18E8C89B00A50247 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4EF567E418BA8C5F0060A66A /* Resources */ = {
@@ -281,6 +415,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4E90B08118E8C98400A50247 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Sparkle;
+			targetProxy = 4E90B08018E8C98400A50247 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4EF567F218BA8C5F0060A66A /* InfoPlist.strings */ = {
