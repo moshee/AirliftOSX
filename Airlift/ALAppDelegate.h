@@ -4,12 +4,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Carbon/Carbon.h>
+#import <Sparkle/SUUpdater.h>
 
 #import "ALDropZoneView.h"
 #import "ALUploadManager.h"
 #import "ALPreferenceViewController.h"
 #import "ALUploadHistoryItem.h"
-#import "Sparkle.framework/Headers/Sparkle.h"
 
 @interface ALAppDelegate
     : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate> {
