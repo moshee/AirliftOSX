@@ -31,6 +31,7 @@
                 additionalInfo:(NSDictionary*)info;
 - (void)addUploadToHistory:(ALUploadHistoryItem*)upload;
 - (void)removeUploadFromHistory:(ALUploadHistoryItem*)upload;
+- (ALPreferenceViewController*)prefs;
 
 enum HotkeyAction { HotkeyTakeScreenshot = 0, HotkeyTakeFullScreenshot };
 

@@ -12,6 +12,8 @@
 }
 
 @property (retain) NSString* versionString;
+@property (retain) NSString* configuredHost;
+@property (retain) NSString* configuredPassword;
 
 - (IBAction)didEnterHostname:(id)sender;
 - (IBAction)didEnterPassword:(id)sender;

@@ -46,8 +46,7 @@
 
 + (NSMutableURLRequest*)constructRequestToPath:(NSString*)path {
 	ALAppDelegate* appDelegate = [ALAppDelegate sharedAppDelegate];
-	NSString* host =
-	    [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
+	NSString* host = [[appDelegate prefs] configuredHost];
 
 	if ([host length] == 0) {
 		[appDelegate showNotificationOfType:ALNotificationParameterError
@@ -57,8 +56,7 @@
 		return nil;
 	}
 
-	NSString* password =
-	    [ALPreferenceViewController retrievePasswordForHost:host];
+	NSString* password = [[appDelegate prefs] configuredPassword];
 
 	if ([password length] == 0) {
 		[appDelegate showNotificationOfType:ALNotificationParameterError

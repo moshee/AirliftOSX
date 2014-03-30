@@ -7,7 +7,7 @@
 
 @implementation ALPreferenceViewController
 
-@synthesize versionString;
+@synthesize versionString, configuredHost, configuredPassword;
 
 static NSString* serviceName = @"airlift";
 
@@ -28,8 +28,8 @@ static NSString* serviceName = @"airlift";
 		    || [password length] == 0) {
 			[[ALAppDelegate sharedAppDelegate] didClickPreferences:self];
 		} else {
-			[hostField setStringValue:host];
-			[passwordField setStringValue:password];
+			[self setConfiguredHost:host];
+			[self setConfiguredPassword:password];
 		}
 
 		NSDictionary* infoPlist = [[NSBundle mainBundle] infoDictionary];
@@ -46,12 +46,12 @@ static NSString* serviceName = @"airlift";
 #pragma mark - Actions
 
 - (IBAction)didEnterHostname:(id)sender {
-	NSString* host = hostField.stringValue;
+	NSString* host = [sender stringValue];
 
 	if ([host length] > 0) {
 		if ([host rangeOfString:@"://"].location == NSNotFound) {
 			host = [@"http://" stringByAppendingString:host];
-			[hostField setStringValue:host];
+			[self setConfiguredHost:host];
 		}
 	}
 	// TODO: look up the corresponding password and set it if it's not empty?
@@ -61,12 +61,11 @@ static NSString* serviceName = @"airlift";
 }
 
 - (IBAction)didEnterPassword:(id)sender {
-	NSString* host =
-	    [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
-	NSString* password = [passwordField stringValue];
+	NSString* password = [sender stringValue];
 
-	if (host.length > 0) {
-		[ALPreferenceViewController updatePassword:password forHost:host];
+	if ([configuredHost length] > 0) {
+		[ALPreferenceViewController updatePassword:password
+		                                   forHost:configuredHost];
 	}
 	// TODO: if host is empty, prompt user to fill it out
 }

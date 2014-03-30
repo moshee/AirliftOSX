@@ -119,6 +119,10 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	return (NSArray*)uploadHistory;
 }
 
+- (ALPreferenceViewController*)prefs {
+	return prefs;
+}
+
 #pragma mark - NSUserNotificationCenterDelegate
 
 - (void)userNotificationCenter:(NSUserNotificationCenter*)center

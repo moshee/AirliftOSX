@@ -38,6 +38,7 @@
                     </textFieldCell>
                     <connections>
                         <action selector="didEnterHostname:" target="-2" id="4JN-Ww-WlV"/>
+                        <binding destination="-2" name="value" keyPath="configuredHost" id="Phv-MW-r8X"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ej2-Fs-xjo">
@@ -74,6 +75,7 @@
                     </secureTextFieldCell>
                     <connections>
                         <action selector="didEnterPassword:" target="-2" id="ina-9v-zfP"/>
+                        <binding destination="-2" name="value" keyPath="configuredPassword" id="7lB-YS-bRd"/>
                     </connections>
                 </secureTextField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7O1-f7-34V">
