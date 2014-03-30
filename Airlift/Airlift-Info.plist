@@ -33,6 +33,10 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://displaynone.us/appcast/airlift</string>
+	<string>http://displaynone.us/appcast/Airlift</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
+	<key>SUShowReleaseNotes</key>
+	<true/>
 </dict>
 </plist>

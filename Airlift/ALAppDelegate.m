@@ -58,6 +58,8 @@
 	                    GetApplicationEventTarget(), 0, &hotKeyRef);
 
 	[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+
+	[[SUUpdater sharedUpdater] setDelegate:self];
 }
 
 + (ALAppDelegate*)sharedAppDelegate {
@@ -170,5 +172,32 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 
 	return noErr;
 }
+
+/*
+
+#pragma mark - SUUpdaterDelegate
+
+- (void)updater:(SUUpdater*)updater
+    didFinishLoadingAppcast:(SUAppcast*)appcast {
+    for (SUAppcastItem* item in [appcast items]) {
+        NSLog(@"%@", item);
+        NSLog(@"%@", [item versionString]);
+        NSLog(@"%@", [item DSASignature]);
+        NSLog(@"%@", [item fileURL]);
+    }
+}
+
+- (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater*)updater {
+    return self;
+}
+
+#pragma mark - SUVersionComparison
+
+- (NSComparisonResult)compareVersion:(NSString*)versionA
+                           toVersion:(NSString*)versionB {
+    NSLog(@"comparing %@ to %@", versionA, versionB);
+    return NSOrderedSame;
+}
+ */
 
 @end
