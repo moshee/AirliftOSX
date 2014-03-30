@@ -245,6 +245,10 @@ static NSMenuItem* emptyUploadHistoryItem;
 		return;
 	}
 	NSLog(@"Cancelling current upload");
+	// when the upload object is cancelled, it will trigger its own request
+	// completion delegate method, and that will remove the "uploading" status
+	// over here, which will set the upload to nil. So we don't have to nil it
+	// out here.
 	[_currentUpload cancel];
 }
 
@@ -255,6 +259,9 @@ static NSMenuItem* emptyUploadHistoryItem;
 #pragma mark - Drag and drop
 
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
+	if (_currentUpload != nil) {
+		return NSDragOperationNone;
+	}
 	[self addStatus:ALDropZoneStatusDrag];
 	return NSDragOperationCopy;
 }
@@ -268,6 +275,9 @@ static NSMenuItem* emptyUploadHistoryItem;
 }
 
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
+	if (_currentUpload != nil) {
+		return NO;
+	}
 	NSPasteboard* pboard = [sender draggingPasteboard];
 
 	if (![[pboard types] containsObject:NSFilenamesPboardType]) {
