@@ -24,8 +24,23 @@
 		url = [url stringByAppendingPathExtension:ext];
 	}
 
-	NSString* linkableURL =
-	    [NSString stringWithFormat:@"%@://%@", [originalURL scheme], url];
+	NSString* scheme = [originalURL scheme];
+	int port = [[originalURL port] intValue];
+
+	NSString* linkableURL = [NSString stringWithFormat:@"%@://%@", scheme, url];
+	BOOL shouldInsertPort =
+	    [[NSUserDefaults standardUserDefaults] boolForKey:@"shouldInsertPort"];
+
+	if (shouldInsertPort
+	    && !(([scheme isEqualToString:@"http"] && port == 80)
+	         || ([scheme isEqualToString:@"https"] && port == 443))) {
+		NSLog(@"got a nonstandard port %d, gonna try to wedge it into the link",
+		      port);
+		NSURL* parsedURL = [NSURL URLWithString:linkableURL];
+		linkableURL =
+		    [NSString stringWithFormat:@"%@://%@:%d%@", scheme,
+		                               [parsedURL host], port, [parsedURL path]];
+	}
 
 	NSString* errMsg = [self copyString:linkableURL];
 	if (errMsg != nil) {

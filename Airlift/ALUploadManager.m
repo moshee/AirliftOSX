@@ -293,9 +293,11 @@
 	}
 
 	if (responseCode != 201) {
-		NSString* subtitle = [NSString
-		    stringWithFormat:@"server returned error: %@ (status %d)",
-		                     [jsonResponse valueForKey:@"Err"], responseCode];
+		NSString* errString = [jsonResponse valueForKey:@"Err"];
+		NSString* subtitle =
+		    [NSString stringWithFormat:@"server returned error: %@ (status %d)",
+		                               errString, responseCode];
+		NSLog(@"Server error: %@ (status %d)", errString, responseCode);
 		[appDelegate showNotificationOfType:ALNotificationUploadAborted
 		                              title:@"Error uploading"
 		                           subtitle:subtitle
