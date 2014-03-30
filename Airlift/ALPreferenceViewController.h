@@ -11,6 +11,8 @@
 	IBOutlet NSSecureTextField* passwordField;
 }
 
+@property (retain) NSString* versionString;
+
 - (IBAction)didEnterHostname:(id)sender;
 - (IBAction)didEnterPassword:(id)sender;
 

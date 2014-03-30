@@ -7,6 +7,8 @@
 
 @implementation ALPreferenceViewController
 
+@synthesize versionString;
+
 static NSString* serviceName = @"airlift";
 
 - (id)initWithCoder:(NSCoder*)aDecoder {
@@ -29,6 +31,13 @@ static NSString* serviceName = @"airlift";
 			[hostField setStringValue:host];
 			[passwordField setStringValue:password];
 		}
+
+		NSDictionary* infoPlist = [[NSBundle mainBundle] infoDictionary];
+		NSString* shortVersion =
+		    [infoPlist valueForKeyPath:@"CFBundleShortVersionString"];
+		NSString* version = [infoPlist valueForKeyPath:@"CFBundleVersion"];
+		self.versionString =
+		    [NSString stringWithFormat:@"Airlift %@ (%@)", shortVersion, version];
 	}
 
 	return self;
