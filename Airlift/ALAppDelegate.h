@@ -33,6 +33,10 @@
 - (void)removeUploadFromHistory:(ALUploadHistoryItem*)upload;
 - (ALPreferenceViewController*)prefs;
 
-enum HotkeyAction { HotkeyTakeScreenshot = 0, HotkeyTakeFullScreenshot };
+enum HotkeyAction {
+	HotkeyTakeScreenshot = 0,
+	HotkeyTakeFullScreenshot,
+	HotkeyUploadFromFinder
+};
 
 @end

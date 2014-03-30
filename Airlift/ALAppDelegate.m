@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #import "ALAppDelegate.h"
+#import "Finder.h"
 
 @interface ALAppDelegate () {
 	NSMenu* menu;
@@ -58,6 +59,11 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	hotKeyID.signature = 'SHOT';
 	hotKeyID.id = HotkeyTakeFullScreenshot;
 	RegisterEventHotKey(kVK_ANSI_3, optionKey + shiftKey, hotKeyID,
+	                    GetApplicationEventTarget(), 0, &hotKeyRef);
+
+	hotKeyID.signature = 'uplf';
+	hotKeyID.id = HotkeyUploadFromFinder;
+	RegisterEventHotKey(kVK_ANSI_D, optionKey, hotKeyID,
 	                    GetApplicationEventTarget(), 0, &hotKeyRef);
 
 	[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
@@ -184,6 +190,33 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	[upload doUpload];
 }
 
++ (void)uploadFileFromFinder {
+	FinderApplication* finder =
+	    [SBApplication applicationWithBundleIdentifier:@"com.apple.Finder"];
+	if (![finder isRunning]) {
+		NSLog(@"Finder is not running");
+		return;
+	}
+
+	SBElementArray* selection = [[finder selection] get];
+	if ([selection count] == 0) {
+		NSLog(@"Finder selection is empty");
+		return;
+	}
+
+	NSArray* URLs = [selection arrayByApplyingSelector:@selector(URL)];
+	NSString* first = [URLs firstObject];
+	NSURL* fileURL = [NSURL URLWithString:first];
+	if (fileURL == nil) {
+		NSLog(@"couldn't convert FinderItem URL '%@' to NSURL", first);
+		return;
+	}
+
+	ALUploadManager* upload = [[ALUploadManager alloc] initWithFileURL:fileURL];
+	[[[ALAppDelegate sharedAppDelegate] dropZone] setCurrentUpload:upload];
+	[upload doUpload];
+}
+
 OSStatus
 handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) {
 	EventHotKeyID hotKeyID;
@@ -196,6 +229,9 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 		break;
 	case HotkeyTakeFullScreenshot:
 		[ALAppDelegate uploadScreenshot:nil];
+		break;
+	case HotkeyUploadFromFinder:
+		[ALAppDelegate uploadFileFromFinder];
 		break;
 	}
 
