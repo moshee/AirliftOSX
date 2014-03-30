@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E90AEE218E697E700A50247 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
 		4E90AEE518E697FC00A50247 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E90AEE118E697E700A50247 /* Sparkle.framework */; };
-		4E90AEE918E76D2200A50247 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4E90AEE818E76D2200A50247 /* dsa_pub.pem */; };
+		4E90AEEB18E7CFE100A50247 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */; };
 		4EF567EA18BA8C5F0060A66A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF567E918BA8C5F0060A66A /* Cocoa.framework */; };
 		4EF567F418BA8C5F0060A66A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EF567F218BA8C5F0060A66A /* InfoPlist.strings */; };
 		4EF567F618BA8C5F0060A66A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF567F518BA8C5F0060A66A /* main.m */; };
@@ -39,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		4E90AEE118E697E700A50247 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Airlift/Sparkle.framework; sourceTree = "<group>"; };
-		4E90AEE818E76D2200A50247 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		4EF567E618BA8C5F0060A66A /* Airlift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airlift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF567E918BA8C5F0060A66A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4EF567EC18BA8C5F0060A66A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -151,7 +151,7 @@
 		4EF5682918BADF3D0060A66A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4E90AEE818E76D2200A50247 /* dsa_pub.pem */,
+				4E90AEEA18E7CFE100A50247 /* dsa_pub.pem */,
 				4EF5682418BA94000060A66A /* ALPreferenceViewController.xib */,
 				4EF567FE18BA8C5F0060A66A /* MainMenu.xib */,
 			);
@@ -214,7 +214,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E90AEE918E76D2200A50247 /* dsa_pub.pem in Resources */,
+				4E90AEEB18E7CFE100A50247 /* dsa_pub.pem in Resources */,
 				4EF567F418BA8C5F0060A66A /* InfoPlist.strings in Resources */,
 				4EF5680218BA8C5F0060A66A /* Images.xcassets in Resources */,
 				4EF5682618BA94000060A66A /* ALPreferenceViewController.xib in Resources */,
@@ -236,7 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "#!/bin/bash\n\n# This script automatically sets the version and short version string of\n# an Xcode project from the Git repository containing the project.\n#\n# To use this script in Xcode 4, add the contents to a \"Run Script\" build\n# phase for your application target.\n\nset -o errexit\nset -o nounset\n\n# First, check for git in $PATH\nhash git 2>/dev/null || { echo >&2 \"Git required, not installed.  Aborting build number update script.\"; exit 0; }\n\n# Alternatively, we could use Xcode's copy of the Git binary,\n# but old Xcodes don't have this.\n#GIT=$(xcrun -find git)\n\n# Run Script build phases that operate on product files of the target that defines them should use the value of this build setting [TARGET_BUILD_DIR]. But Run Script build phases that operate on product files of other targets should use “BUILT_PRODUCTS_DIR” instead.\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n\n# Build version (closest-tag-or-branch \"-\" commits-since-tag \"-\" short-hash dirty-flag)\nBUILD_VERSION=$(git describe --tags --always --dirty=+)\n\n# Use the latest tag for short version (expected tag format \"n[.n[.n]]\")\nLATEST_TAG=$(git describe --tags --abbrev=0)\nCOMMIT_COUNT_SINCE_TAG=$(git rev-list --count ${LATEST_TAG}..)\nif [ $LATEST_TAG = \"start\" ]; then\n    LATEST_TAG=0\nfi\n\nif [ $COMMIT_COUNT_SINCE_TAG = 0 ]; then\n    SHORT_VERSION=\"$LATEST_TAG\"\nelse\n# increment final digit of tag and append \"d\" + commit-count-since-tag\n# e.g. commit after 1.0 is 1.1d1, commit after 1.0.0 is 1.0.1d1\n# this is the bit that requires /bin/bash\n    OLD_IFS=$IFS\n    IFS=\".\"\n    VERSION_PARTS=($LATEST_TAG)\n    LAST_PART=$((${#VERSION_PARTS[@]}-1))\n    VERSION_PARTS[$LAST_PART]=$((${VERSION_PARTS[${LAST_PART}]}+1))\n    SHORT_VERSION=\"${VERSION_PARTS[*]}+${COMMIT_COUNT_SINCE_TAG}\"\n    IFS=$OLD_IFS\nfi\n    \n    # Bundle version (commits-on-master[-until-branch \".\" commits-on-branch])\n    # Assumes that two release branches will not diverge from the same commit on master.\nif [ $(git rev-parse --abbrev-ref HEAD) = \"master\" ]; then\n    MASTER_COMMIT_COUNT=$(git rev-list --count HEAD)\n    BRANCH_COMMIT_COUNT=0\n    BUNDLE_VERSION=\"$MASTER_COMMIT_COUNT\"\nelse\n    MASTER_COMMIT_COUNT=$(git rev-list --count $(git rev-list master.. | tail -n 1)^)\n    BRANCH_COMMIT_COUNT=$(git rev-list --count master..)\n    if [ $BRANCH_COMMIT_COUNT = 0 ]; then\n        BUNDLE_VERSION=\"$MASTER_COMMIT_COUNT\"\n    else\n        BUNDLE_VERSION=\"${MASTER_COMMIT_COUNT}.${BRANCH_COMMIT_COUNT}\"\n    fi\nfi\n    \n    defaults write \"$INFO_PLIST\" CFBundleBuildVersion       \"$BUILD_VERSION\"\n    defaults write \"$INFO_PLIST\" CFBundleShortVersionString \"$SHORT_VERSION\"\n    defaults write \"$INFO_PLIST\" CFBundleVersion            \"$BUNDLE_VERSION\"";
+			shellScript = "#!/bin/bash\n\n# This script automatically sets the version and short version string of\n# an Xcode project from the Git repository containing the project.\n#\n# To use this script in Xcode 4, add the contents to a \"Run Script\" build\n# phase for your application target.\n\nexit\n\nset -o errexit\nset -o nounset\n\n# First, check for git in $PATH\nhash git 2>/dev/null || { echo >&2 \"Git required, not installed.  Aborting build number update script.\"; exit 0; }\n\n# Alternatively, we could use Xcode's copy of the Git binary,\n# but old Xcodes don't have this.\n#GIT=$(xcrun -find git)\n\n# Run Script build phases that operate on product files of the target that defines them should use the value of this build setting [TARGET_BUILD_DIR]. But Run Script build phases that operate on product files of other targets should use “BUILT_PRODUCTS_DIR” instead.\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n\n# Build version (closest-tag-or-branch \"-\" commits-since-tag \"-\" short-hash dirty-flag)\nBUILD_VERSION=$(git describe --tags --always --dirty=+)\n\n# Use the latest tag for short version (expected tag format \"n[.n[.n]]\")\nLATEST_TAG=$(git describe --tags --abbrev=0)\nCOMMIT_COUNT_SINCE_TAG=$(git rev-list --count ${LATEST_TAG}..)\nif [ $LATEST_TAG = \"start\" ]; then\n    LATEST_TAG=0\nfi\n\nif [ $COMMIT_COUNT_SINCE_TAG = 0 ]; then\n    SHORT_VERSION=\"$LATEST_TAG\"\nelse\n# increment final digit of tag and append \"d\" + commit-count-since-tag\n# e.g. commit after 1.0 is 1.1d1, commit after 1.0.0 is 1.0.1d1\n# this is the bit that requires /bin/bash\n    OLD_IFS=$IFS\n    IFS=\".\"\n    VERSION_PARTS=($LATEST_TAG)\n    LAST_PART=$((${#VERSION_PARTS[@]}-1))\n    VERSION_PARTS[$LAST_PART]=$((${VERSION_PARTS[${LAST_PART}]}+1))\n    SHORT_VERSION=\"${VERSION_PARTS[*]}+${COMMIT_COUNT_SINCE_TAG}\"\n    IFS=$OLD_IFS\nfi\n    \n    # Bundle version (commits-on-master[-until-branch \".\" commits-on-branch])\n    # Assumes that two release branches will not diverge from the same commit on master.\nif [ $(git rev-parse --abbrev-ref HEAD) = \"master\" ]; then\n    MASTER_COMMIT_COUNT=$(git rev-list --count HEAD)\n    BRANCH_COMMIT_COUNT=0\n    BUNDLE_VERSION=\"$MASTER_COMMIT_COUNT\"\nelse\n    MASTER_COMMIT_COUNT=$(git rev-list --count $(git rev-list master.. | tail -n 1)^)\n    BRANCH_COMMIT_COUNT=$(git rev-list --count master..)\n    if [ $BRANCH_COMMIT_COUNT = 0 ]; then\n        BUNDLE_VERSION=\"$MASTER_COMMIT_COUNT\"\n    else\n        BUNDLE_VERSION=\"${MASTER_COMMIT_COUNT}.${BRANCH_COMMIT_COUNT}\"\n    fi\nfi\n    \n    defaults write \"$INFO_PLIST\" CFBundleBuildVersion       \"$BUILD_VERSION\"\n    defaults write \"$INFO_PLIST\" CFBundleShortVersionString \"$SHORT_VERSION\"\n    defaults write \"$INFO_PLIST\" CFBundleVersion            \"$BUNDLE_VERSION\"";
 			showEnvVarsInLog = 0;
 		};
 		4E90AEE718E6992200A50247 /* ShellScript */ = {
@@ -362,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -380,6 +381,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
