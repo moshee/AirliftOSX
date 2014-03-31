@@ -27,32 +27,45 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	[_window setTitle:@"Airlift settings"];
 	[_window setLevel:NSFloatingWindowLevel];
 
-	EventHotKeyRef hotKeyRef;
-	EventHotKeyID hotKeyID;
-	EventTypeSpec eventType;
+	[self addHotkey:kVK_ANSI_4
+	    withModifiers:optionKey + shiftKey
+	        signature:'usht'
+	        forAction:ALHotkeyTakeScreenshot];
+	[self addHotkey:kVK_ANSI_3
+	    withModifiers:optionKey + shiftKey
+	        signature:'uSHT'
+	        forAction:ALHotkeyTakeFullScreenshot];
+	[self addHotkey:kVK_ANSI_D
+	    withModifiers:optionKey
+	        signature:'uFnd'
+	        forAction:ALHotkeyUploadFromFinder];
+	[self addHotkey:kVK_ANSI_V
+	    withModifiers:optionKey + shiftKey
+	        signature:'upst'
+	        forAction:ALHotkeyUploadFromPasteboard];
+
+	[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+
+	[[SUUpdater sharedUpdater] setDelegate:self];
+}
+
+- (void)addHotkey:(UInt32)key
+    withModifiers:(UInt32)modifiers
+        signature:(OSType)signature
+        forAction:(ALHotkeyAction)action {
+
+	static EventHotKeyRef hotKeyRef;
+	static EventHotKeyID hotKeyID;
+	static EventTypeSpec eventType;
 
 	eventType.eventClass = kEventClassKeyboard;
 	eventType.eventKind = kEventHotKeyPressed;
 	InstallApplicationEventHandler(&handleHotkey, 1, &eventType, NULL, NULL);
 
-	hotKeyID.signature = 'shot';
-	hotKeyID.id = HotkeyTakeScreenshot;
-	RegisterEventHotKey(kVK_ANSI_4, optionKey + shiftKey, hotKeyID,
-	                    GetApplicationEventTarget(), 0, &hotKeyRef);
-
-	hotKeyID.signature = 'SHOT';
-	hotKeyID.id = HotkeyTakeFullScreenshot;
-	RegisterEventHotKey(kVK_ANSI_3, optionKey + shiftKey, hotKeyID,
-	                    GetApplicationEventTarget(), 0, &hotKeyRef);
-
-	hotKeyID.signature = 'uplf';
-	hotKeyID.id = HotkeyUploadFromFinder;
-	RegisterEventHotKey(kVK_ANSI_D, optionKey, hotKeyID,
-	                    GetApplicationEventTarget(), 0, &hotKeyRef);
-
-	[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
-
-	[[SUUpdater sharedUpdater] setDelegate:self];
+	hotKeyID.signature = signature;
+	hotKeyID.id = action;
+	RegisterEventHotKey(key, modifiers, hotKeyID, GetApplicationEventTarget(),
+	                    0, &hotKeyRef);
 }
 
 + (ALAppDelegate*)sharedAppDelegate {
@@ -142,6 +155,30 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 
 #pragma mark - Hotkey handling
 
+OSStatus
+handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) {
+	EventHotKeyID hotKeyID;
+	GetEventParameter(anEvent, kEventParamDirectObject, typeEventHotKeyID, NULL,
+	                  sizeof(hotKeyID), NULL, &hotKeyID);
+
+	switch (hotKeyID.id) {
+	case ALHotkeyTakeScreenshot:
+		[ALAppDelegate uploadScreenshot:@[@"-i"]];
+		break;
+	case ALHotkeyTakeFullScreenshot:
+		[ALAppDelegate uploadScreenshot:nil];
+		break;
+	case ALHotkeyUploadFromFinder:
+		[ALAppDelegate uploadFileFromFinder];
+		break;
+	case ALHotkeyUploadFromPasteboard:
+		[ALAppDelegate uploadFromPasteboard];
+		break;
+	}
+
+	return noErr;
+}
+
 + (void)uploadScreenshot:(NSArray*)additionalArgs {
 	NSString* format = @"Screenshot %Y-%m-%d at %H.%M.%S.png";
 	NSDictionary* locale =
@@ -203,25 +240,68 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	[upload doUpload];
 }
 
-OSStatus
-handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) {
-	EventHotKeyID hotKeyID;
-	GetEventParameter(anEvent, kEventParamDirectObject, typeEventHotKeyID, NULL,
-	                  sizeof(hotKeyID), NULL, &hotKeyID);
++ (void)uploadFromPasteboard {
+	NSPasteboard* pboard = [NSPasteboard generalPasteboard];
+	NSArray* types = [pboard types];
 
-	switch (hotKeyID.id) {
-	case HotkeyTakeScreenshot:
-		[ALAppDelegate uploadScreenshot:@[@"-i"]];
-		break;
-	case HotkeyTakeFullScreenshot:
-		[ALAppDelegate uploadScreenshot:nil];
-		break;
-	case HotkeyUploadFromFinder:
-		[ALAppDelegate uploadFileFromFinder];
-		break;
+	NSURL* fileURL;
+	BOOL shouldDelete;
+
+	if ([types containsObject:NSURLPboardType]) {
+		fileURL = [NSURL URLFromPasteboard:pboard];
+		shouldDelete = NO;
+	} else {
+		NSString* tempPath;
+		NSError* error;
+
+		if ([types containsObject:NSPasteboardTypeHTML]) {
+			NSString* text = [pboard stringForType:NSPasteboardTypeHTML];
+			tempPath = [NSTemporaryDirectory()
+			    stringByAppendingPathComponent:@"index.html"];
+
+			[text writeToFile:tempPath
+			       atomically:NO
+			         encoding:NSUTF8StringEncoding
+			            error:&error];
+		} else if ([types containsObject:NSPasteboardTypePNG]) {
+			NSData* data = [pboard dataForType:NSPasteboardTypePNG];
+			tempPath = [NSTemporaryDirectory()
+			    stringByAppendingPathComponent:@"image.png"];
+
+			[data writeToFile:tempPath options:0 error:&error];
+		} else if ([types containsObject:NSPasteboardTypeString]) {
+			NSString* text = [pboard stringForType:NSPasteboardTypeString];
+			tempPath = [NSTemporaryDirectory()
+			    stringByAppendingPathComponent:@"paste.txt"];
+
+			[text writeToFile:tempPath
+			       atomically:NO
+			         encoding:NSUTF8StringEncoding
+			            error:&error];
+		} else {
+			return;
+		}
+
+		if (error != nil) {
+			NSString* subtitle =
+			    [NSString stringWithFormat:@"Couldn't buffer paste: %@", error];
+			[[ALAppDelegate sharedAppDelegate]
+			    showNotificationOfType:ALNotificationUploadAborted
+			                     title:@"Error uploading paste"
+			                  subtitle:subtitle
+			            additionalInfo:nil];
+			return;
+		}
+
+		shouldDelete = YES;
+		fileURL = [NSURL fileURLWithPath:tempPath];
 	}
 
-	return noErr;
+	ALUploadManager* upload =
+	    [[ALUploadManager alloc] initWithFileURL:fileURL
+	                      deletingFileAfterwards:shouldDelete];
+	[[[ALAppDelegate sharedAppDelegate] dropZone] setCurrentUpload:upload];
+	[upload doUpload];
 }
 
 /*

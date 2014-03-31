@@ -10,40 +10,42 @@
 	NSMutableData* receivedData;
 	int responseCode;
 	ALAppDelegate* appDelegate;
+
 	NSURL* targetFilePath;
-	NSURLSessionUploadTask* upload;
 	BOOL shouldDeleteFile;
+
+	NSMutableURLRequest* request;
+	NSURLSessionUploadTask* upload;
 }
 
 @end
 
 @implementation ALUploadManager
 
+static NSString* const ALRequestHeaderFilename = @"X-Airlift-Filename";
+static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
+
 - (id)initWithFileURL:(NSURL*)fileURL
     deletingFileAfterwards:(BOOL)shouldDelete {
+
 	self = [super init];
-	if (self != nil) {
-		appDelegate = [ALAppDelegate sharedAppDelegate];
-		shouldDeleteFile = shouldDelete;
+	if (self == nil)
+		return self;
 
-		targetFilePath = fileURL;
-		NSMutableURLRequest* request =
-		    [ALUploadManager constructRequestToPath:@"/upload/file"];
+	appDelegate = [ALAppDelegate sharedAppDelegate];
+	request = [ALUploadManager constructRequestToPath:@"/upload/file"];
+	session = [NSURLSession sessionWithConfiguration:nil
+	                                        delegate:self
+	                                   delegateQueue:nil];
 
-		if (request == nil) {
-			return nil;
-		}
+	shouldDeleteFile = shouldDelete;
+	targetFilePath = fileURL;
 
-		NSString* fileName = [[targetFilePath path] lastPathComponent];
-		[request setValue:fileName forHTTPHeaderField:@"X-Airlift-Filename"];
+	NSString* fileName = [[targetFilePath path] lastPathComponent];
+	[request setValue:fileName forHTTPHeaderField:ALRequestHeaderFilename];
 
-		session = [NSURLSession sessionWithConfiguration:nil
-		                                        delegate:self
-		                                   delegateQueue:nil];
+	upload = [session uploadTaskWithRequest:request fromFile:targetFilePath];
 
-		upload =
-		    [session uploadTaskWithRequest:request fromFile:targetFilePath];
-	}
 	return self;
 }
 
@@ -62,9 +64,11 @@
 	NSString* password = [[appDelegate prefs] configuredPassword];
 
 	if ([password length] == 0) {
+		NSString* subtitle =
+		    @"A password has not been set for the configured host";
 		[appDelegate showNotificationOfType:ALNotificationParameterError
 		                              title:@"Error"
-		                           subtitle:@"A password has not been set for " @"the configured host"
+		                           subtitle:subtitle
 		                     additionalInfo:nil];
 		return nil;
 	}
@@ -86,7 +90,7 @@
 	    [NSMutableURLRequest requestWithURL:requestURL];
 
 	[request setHTTPMethod:@"POST"];
-	[request setValue:password forHTTPHeaderField:@"X-Airlift-Password"];
+	[request setValue:password forHTTPHeaderField:ALRequestHeaderPassword];
 
 	return request;
 }

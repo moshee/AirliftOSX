@@ -144,6 +144,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4E90B09718E9254C00A50247 /* Uploads */ = {
+			isa = PBXGroup;
+			children = (
+				4EF60A9918E3751B003AB75F /* ALUploadManager.h */,
+				4EF60A9A18E3751B003AB75F /* ALUploadManager.m */,
+				4E90AEF118E7EB4A00A50247 /* ALUploadHistoryItem.h */,
+				4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */,
+			);
+			name = Uploads;
+			sourceTree = "<group>";
+		};
 		4EF567DD18BA8C5F0060A66A = {
 			isa = PBXGroup;
 			children = (
@@ -195,10 +206,7 @@
 				4EF5682318BA94000060A66A /* ALPreferenceViewController.m */,
 				4EF5683018BB03B30060A66A /* ALDropZoneView.h */,
 				4EF5683118BB03B30060A66A /* ALDropZoneView.m */,
-				4EF60A9918E3751B003AB75F /* ALUploadManager.h */,
-				4EF60A9A18E3751B003AB75F /* ALUploadManager.m */,
-				4E90AEF118E7EB4A00A50247 /* ALUploadHistoryItem.h */,
-				4E90AEF218E7EB4A00A50247 /* ALUploadHistoryItem.m */,
+				4E90B09718E9254C00A50247 /* Uploads */,
 				4EF5680118BA8C5F0060A66A /* Images.xcassets */,
 				4EF5682918BADF3D0060A66A /* Resources */,
 				4EF567F018BA8C5F0060A66A /* Supporting Files */,

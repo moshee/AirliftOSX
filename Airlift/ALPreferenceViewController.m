@@ -9,7 +9,7 @@
 
 @synthesize versionString, configuredHost, configuredPassword;
 
-static NSString* serviceName = @"airlift";
+static NSString* const serviceName = @"airlift";
 
 - (id)initWithCoder:(NSCoder*)aDecoder {
 	self = [super initWithCoder:aDecoder];
