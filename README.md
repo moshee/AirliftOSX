@@ -24,3 +24,8 @@ Then, you can drag files onto the icon, use `Opt+Shift+4` to capture and upload 
 While a file is uploading, a "cancel upload" item will appear in the menu; click it to cancel the upload.
 
 Clicking the "Oops!" item will delete the last item uploaded to the server.
+
+#### More shortcuts:
+
+`Opt+D`: upload currently selected file in Finder. If multiple files are selected, only the first will be uploaded
+`Opt+Shift+V`: upload data in pasteboard
