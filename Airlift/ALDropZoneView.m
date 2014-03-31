@@ -245,7 +245,8 @@ static NSMenuItem* emptyUploadHistoryItem;
 	[self removeStatus:ALDropZoneStatusDrag];
 	NSURL* filePath = [NSURL URLFromPasteboard:pboard];
 
-	currentUpload = [[ALUploadManager alloc] initWithFileURL:filePath];
+	currentUpload = [[ALUploadManager alloc] initWithFileURL:filePath
+	                                  deletingFileAfterwards:NO];
 	[currentUpload doUpload];
 	return YES;
 }

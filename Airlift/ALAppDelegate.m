@@ -169,7 +169,8 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	}
 
 	NSURL* fileURL = [NSURL fileURLWithPath:tempFilePath];
-	ALUploadManager* upload = [[ALUploadManager alloc] initWithFileURL:fileURL];
+	ALUploadManager* upload = [[ALUploadManager alloc] initWithFileURL:fileURL
+	                                            deletingFileAfterwards:YES];
 	[[[ALAppDelegate sharedAppDelegate] dropZone] setCurrentUpload:upload];
 	[upload doUpload];
 }
@@ -196,7 +197,8 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 		return;
 	}
 
-	ALUploadManager* upload = [[ALUploadManager alloc] initWithFileURL:fileURL];
+	ALUploadManager* upload = [[ALUploadManager alloc] initWithFileURL:fileURL
+	                                            deletingFileAfterwards:NO];
 	[[[ALAppDelegate sharedAppDelegate] dropZone] setCurrentUpload:upload];
 	[upload doUpload];
 }

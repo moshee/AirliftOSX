@@ -14,7 +14,7 @@
 + (void)deleteUploadAtURL:(NSString*)urlToDelete;
 + (void)oops;
 
-- (id)initWithFileURL:(NSURL*)fileURL;
+- (id)initWithFileURL:(NSURL*)fileURL deletingFileAfterwards:(BOOL)shouldDelete;
 
 - (void)doUpload;
 - (void)cancel;

@@ -12,16 +12,19 @@
 	ALAppDelegate* appDelegate;
 	NSURL* targetFilePath;
 	NSURLSessionUploadTask* upload;
+	BOOL shouldDeleteFile;
 }
 
 @end
 
 @implementation ALUploadManager
 
-- (id)initWithFileURL:(NSURL*)fileURL {
+- (id)initWithFileURL:(NSURL*)fileURL
+    deletingFileAfterwards:(BOOL)shouldDelete {
 	self = [super init];
 	if (self != nil) {
 		appDelegate = [ALAppDelegate sharedAppDelegate];
+		shouldDeleteFile = shouldDelete;
 
 		targetFilePath = fileURL;
 		NSMutableURLRequest* request =
@@ -314,6 +317,10 @@
 	[historyItem setFilePath:targetFilePath];
 
 	[appDelegate addUploadToHistory:historyItem];
+	if (shouldDeleteFile) {
+		NSString* filePath = [targetFilePath path];
+		[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+	}
 }
 
 #pragma mark - NSURLSessionDataDelegate
