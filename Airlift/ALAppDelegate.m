@@ -180,12 +180,10 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 }
 
 + (void)uploadScreenshot:(NSArray*)additionalArgs {
-	NSString* format = @"Screenshot %Y-%m-%d at %H.%M.%S.png";
-	NSDictionary* locale =
-	    [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-	NSString* fileName = [[NSDate date] descriptionWithCalendarFormat:format
-	                                                         timeZone:nil
-	                                                           locale:locale];
+	NSString* fileName =
+	    [ALAppDelegate createTimestampPrefixedWith:@"Screenshot"
+	                                      endingIn:@".png"];
+
 	NSString* tempFilePath =
 	    [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
 
@@ -265,14 +263,20 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 			            error:&error];
 		} else if ([types containsObject:NSPasteboardTypePNG]) {
 			NSData* data = [pboard dataForType:NSPasteboardTypePNG];
-			tempPath = [NSTemporaryDirectory()
-			    stringByAppendingPathComponent:@"image.png"];
+			NSString* fileName =
+			    [ALAppDelegate createTimestampPrefixedWith:@"Image"
+			                                      endingIn:@".png"];
+			tempPath =
+			    [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
 
 			[data writeToFile:tempPath options:0 error:&error];
 		} else if ([types containsObject:NSPasteboardTypeString]) {
 			NSString* text = [pboard stringForType:NSPasteboardTypeString];
-			tempPath = [NSTemporaryDirectory()
-			    stringByAppendingPathComponent:@"paste.txt"];
+			NSString* fileName =
+			    [ALAppDelegate createTimestampPrefixedWith:@"Paste"
+			                                      endingIn:@".txt"];
+			tempPath =
+			    [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
 
 			[text writeToFile:tempPath
 			       atomically:NO
@@ -302,6 +306,18 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 	                      deletingFileAfterwards:shouldDelete];
 	[[[ALAppDelegate sharedAppDelegate] dropZone] setCurrentUpload:upload];
 	[upload doUpload];
+}
+
++ (NSString*)createTimestampPrefixedWith:(NSString*)prefix
+                                endingIn:(NSString*)extension {
+	NSString* format = @"%Y-%m-%d at %H.%M.%S";
+	NSDictionary* locale =
+	    [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+	NSString* stamp = [[NSDate date] descriptionWithCalendarFormat:format
+	                                                      timeZone:nil
+	                                                        locale:locale];
+
+	return [NSString stringWithFormat:@"%@ %@%@", prefix, stamp, extension];
 }
 
 /*
