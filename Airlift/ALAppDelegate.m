@@ -243,8 +243,6 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 	NSURL* fileURL;
 	BOOL shouldDelete;
 
-	NSLog(@"%@", types);
-
 	if ([types containsObject:NSURLPboardType]) {
 		fileURL = [NSURL URLFromPasteboard:pboard];
 		shouldDelete = NO;
@@ -283,7 +281,6 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 			         encoding:NSUTF8StringEncoding
 			            error:&error];
 		} else if ([types containsObject:NSPasteboardTypeTIFF]) {
-			NSLog(@"yeah");
 			NSData* data = [pboard dataForType:NSPasteboardTypeTIFF];
 			CGImageRef image = [[NSBitmapImageRep imageRepWithData:data] CGImage];
 			NSString* fileName =
