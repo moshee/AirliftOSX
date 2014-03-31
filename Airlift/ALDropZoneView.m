@@ -9,17 +9,13 @@
 	NSStatusItem* statusItem;
 	int status;
 	CGFloat progress;
-	NSMenuItem* progressMenuItem;
-	NSMenuItem* cancelUploadMenuItem;
-	NSMenuItem* oopsMenuItem;
-	NSMenu* uploadHistoryMenu;
 }
 
 @end
 
 @implementation ALDropZoneView
 
-@synthesize currentUpload = _currentUpload;
+@synthesize currentUpload, menu;
 
 static NSImage* StatusIcon;
 static NSImage* StatusIconDrag;
@@ -28,7 +24,7 @@ static NSImage* StatusIconUploading;
 
 static NSMenuItem* emptyUploadHistoryItem;
 
-- (id)initWithMenu:(NSMenu*)menu {
+- (id)initWithFrame:(NSRect)frameRect {
 	NSStatusItem* item =
 	    [[NSStatusBar systemStatusBar] statusItemWithLength:28.0];
 	CGFloat itemWidth = [item length];
@@ -50,43 +46,11 @@ static NSMenuItem* emptyUploadHistoryItem;
 	}
 
 	if (self) {
-		progressMenuItem = [NSMenuItem new];
-		[progressMenuItem setTitle:@"Uploading..."];
-		[progressMenuItem setEnabled:NO];
-		[progressMenuItem setHidden:YES];
-		[menu insertItem:progressMenuItem atIndex:0];
-
-		cancelUploadMenuItem =
-		    [[NSMenuItem alloc] initWithTitle:@"Cancel upload"
-		                               action:@selector(cancelUpload:)
-		                        keyEquivalent:@""];
-		[cancelUploadMenuItem setTarget:self];
-		[cancelUploadMenuItem setHidden:YES];
-		[menu insertItem:cancelUploadMenuItem atIndex:1];
-
-		oopsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Delete last upload"
-		                                          action:@selector(oops:)
-		                                   keyEquivalent:@""];
-		[oopsMenuItem setTarget:self];
-		[oopsMenuItem setToolTip:@"In a crisis, you can click this to quickly "
-		              @"delete the last file uploaded."];
-
-		[menu insertItem:oopsMenuItem atIndex:2];
-
-		NSMenuItem* uploadHistoryMenuItem = [NSMenuItem new];
-		[uploadHistoryMenuItem setTitle:@"Past uploads"];
-
-		uploadHistoryMenu = [NSMenu new];
 		[self setHistoryItems:nil];
-		[uploadHistoryMenuItem setSubmenu:uploadHistoryMenu];
-		[menu insertItem:uploadHistoryMenuItem atIndex:3];
-
-		[menu insertItem:[NSMenuItem separatorItem] atIndex:4];
 
 		statusItem = item;
 		[statusItem setView:self];
-		[menu setDelegate:self];
-		[statusItem setMenu:menu];
+		//[statusItem setMenu:menu];
 
 		status = ALDropZoneStatusNormal;
 		progress = 0.0;
@@ -164,6 +128,10 @@ static NSMenuItem* emptyUploadHistoryItem;
 - (void)addStatus:(ALDropZoneStatus)_status {
 	status |= _status;
 	[self setNeedsDisplay:YES];
+
+	if (_status == ALDropZoneStatusUploading) {
+		[[ALAppDelegate sharedAppDelegate] setIsBusyUploading:YES];
+	}
 }
 
 - (void)removeStatus:(ALDropZoneStatus)_status {
@@ -171,9 +139,8 @@ static NSMenuItem* emptyUploadHistoryItem;
 	[self setNeedsDisplay:YES];
 
 	if (_status == ALDropZoneStatusUploading) {
-		[progressMenuItem setHidden:YES];
-		[cancelUploadMenuItem setHidden:YES];
-		_currentUpload = nil;
+		[[ALAppDelegate sharedAppDelegate] setIsBusyUploading:NO];
+		currentUpload = nil;
 	}
 }
 
@@ -182,10 +149,7 @@ static NSMenuItem* emptyUploadHistoryItem;
 		[self removeStatus:ALDropZoneStatusSelected];
 	} else {
 		[self addStatus:ALDropZoneStatusSelected];
-	}
-
-	if ([self hasStatus:ALDropZoneStatusSelected]) {
-		[statusItem popUpStatusItemMenu:[statusItem menu]];
+		[statusItem popUpStatusItemMenu:menu];
 	}
 }
 
@@ -196,12 +160,6 @@ static NSMenuItem* emptyUploadHistoryItem;
 - (void)setProgress:(CGFloat)_progress {
 	progress = _progress;
 	[self setNeedsDisplay:YES];
-
-	if ([self hasStatus:ALDropZoneStatusUploading]
-	        && [progressMenuItem isHidden]) {
-		[progressMenuItem setHidden:NO];
-		[cancelUploadMenuItem setHidden:NO];
-	}
 }
 
 - (void)setHistoryItems:(NSArray*)historyItems {
@@ -239,8 +197,8 @@ static NSMenuItem* emptyUploadHistoryItem;
 
 #pragma mark - Menu actions
 
-- (void)cancelUpload:(id)sender {
-	if (_currentUpload == nil) {
+- (IBAction)cancelUpload:(id)sender {
+	if (currentUpload == nil) {
 		NSLog(@"Not cancelling upload because currentUpload is nil");
 		return;
 	}
@@ -249,17 +207,17 @@ static NSMenuItem* emptyUploadHistoryItem;
 	// completion delegate method, and that will remove the "uploading" status
 	// over here, which will set the upload to nil. So we don't have to nil it
 	// out here.
-	[_currentUpload cancel];
+	[currentUpload cancel];
 }
 
-- (void)oops:(id)sender {
+- (IBAction)oops:(id)sender {
 	[ALUploadManager oops];
 }
 
 #pragma mark - Drag and drop
 
 - (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
-	if (_currentUpload != nil) {
+	if (currentUpload != nil) {
 		return NSDragOperationNone;
 	}
 	[self addStatus:ALDropZoneStatusDrag];
@@ -275,7 +233,7 @@ static NSMenuItem* emptyUploadHistoryItem;
 }
 
 - (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-	if (_currentUpload != nil) {
+	if (currentUpload != nil) {
 		return NO;
 	}
 	NSPasteboard* pboard = [sender draggingPasteboard];
@@ -287,8 +245,8 @@ static NSMenuItem* emptyUploadHistoryItem;
 	[self removeStatus:ALDropZoneStatusDrag];
 	NSURL* filePath = [NSURL URLFromPasteboard:pboard];
 
-	_currentUpload = [[ALUploadManager alloc] initWithFileURL:filePath];
-	[_currentUpload doUpload];
+	currentUpload = [[ALUploadManager alloc] initWithFileURL:filePath];
+	[currentUpload doUpload];
 	return YES;
 }
 

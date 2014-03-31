@@ -6,11 +6,12 @@
 #import "ALUploadManager.h"
 #import "ALUploadHistoryItem.h"
 
-@interface ALDropZoneView : NSView <NSMenuDelegate, NSDraggingDestination>
+@interface ALDropZoneView : NSView <NSMenuDelegate, NSDraggingDestination> {
+	IBOutlet NSMenu* uploadHistoryMenu;
+}
 
+@property (assign) IBOutlet NSMenu* menu;
 @property (retain) ALUploadManager* currentUpload;
-
-- (id)initWithMenu:(NSMenu*)menu;
 
 - (void)addStatus:(ALDropZoneStatus)status;
 - (BOOL)hasStatus:(ALDropZoneStatus)status;
@@ -18,5 +19,8 @@
 - (void)setHistoryItems:(NSArray*)historyItems;
 
 - (void)setProgress:(CGFloat)progress;
+
+- (IBAction)cancelUpload:(id)sender;
+- (IBAction)oops:(id)sender;
 
 @end

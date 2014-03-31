@@ -19,12 +19,12 @@
 }
 
 @property (assign) IBOutlet NSWindow* window;
-@property (readonly) ALDropZoneView* dropZone;
+@property (assign) IBOutlet ALDropZoneView* dropZone;
+@property (assign) BOOL isBusyUploading;
 
 + (void)uploadScreenshot:(NSArray*)additionalArgs;
 + (ALAppDelegate*)sharedAppDelegate;
 
-- (void)didClickPreferences:(id)sender;
 - (void)showNotificationOfType:(ALNotificationType)notificationType
                          title:(NSString*)title
                       subtitle:(NSString*)subtitle
@@ -32,6 +32,8 @@
 - (void)addUploadToHistory:(ALUploadHistoryItem*)upload;
 - (void)removeUploadFromHistory:(ALUploadHistoryItem*)upload;
 - (ALPreferenceViewController*)prefs;
+
+- (IBAction)didClickPreferences:(id)sender;
 
 enum HotkeyAction {
 	HotkeyTakeScreenshot = 0,

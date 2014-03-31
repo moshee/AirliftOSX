@@ -628,6 +628,7 @@
         </menu>
         <customObject id="494" customClass="ALAppDelegate">
             <connections>
+                <outlet property="dropZone" destination="hc8-u0-jgh" id="b9t-Z7-gLG"/>
                 <outlet property="prefs" destination="2j8-Fj-MeC" id="CfA-uO-Kw8"/>
                 <outlet property="updater" destination="L2x-vR-OG2" id="2pN-fc-D3V"/>
                 <outlet property="window" destination="IKf-XO-YLi" id="A0V-kd-bxk"/>
@@ -645,5 +646,67 @@
             </view>
         </window>
         <customObject id="L2x-vR-OG2" customClass="SUUpdater"/>
+        <menu id="ogp-yE-854">
+            <items>
+                <menuItem title="Cancel upload" hidden="YES" id="K0g-Ks-ean">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="cancelUpload:" target="hc8-u0-jgh" id="uYS-dp-J8V"/>
+                        <binding destination="494" name="hidden" keyPath="isBusyUploading" id="002-w8-e4U">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </menuItem>
+                <menuItem title="Delete last upload" id="Evc-l2-v0d">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="oops:" target="hc8-u0-jgh" id="Vlp-io-gsB"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Past uploads" id="R40-lv-wWB">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Past uploads" id="WET-FQ-WbA">
+                        <items>
+                            <menuItem title="(No uploads)" enabled="NO" id="tiK-fc-qkH">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="toY-dR-zzd"/>
+                <menuItem title="Settings..." id="w2b-lX-TKI">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="didClickPreferences:" target="494" id="0aR-Sc-B4c"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Check for updates..." id="WDw-ar-84T">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="checkForUpdates:" target="L2x-vR-OG2" id="Aky-6l-4Un"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="nwd-OY-ROZ"/>
+                <menuItem title="Quit" id="K66-zu-W4k">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="terminate:" target="-3" id="ugf-rk-2x8"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <connections>
+                <outlet property="delegate" destination="hc8-u0-jgh" id="k2v-c8-Phe"/>
+            </connections>
+        </menu>
+        <customView id="hc8-u0-jgh" customClass="ALDropZoneView">
+            <rect key="frame" x="0.0" y="0.0" width="163" height="96"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <connections>
+                <outlet property="menu" destination="ogp-yE-854" id="tVh-Xq-Sf5"/>
+                <outlet property="uploadHistoryMenu" destination="WET-FQ-WbA" id="f1o-8A-ndu"/>
+            </connections>
+        </customView>
     </objects>
 </document>

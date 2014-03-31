@@ -6,7 +6,6 @@
 #import "Finder.h"
 
 @interface ALAppDelegate () {
-	NSMenu* menu;
 	NSMutableArray* uploadHistory;
 }
 
@@ -14,27 +13,12 @@
 
 @implementation ALAppDelegate
 
+@synthesize isBusyUploading, dropZone;
+
 const NSUInteger MAX_UPLOAD_HISTORY = 10;
 
-@synthesize dropZone;
-
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
-	menu = [[NSMenu alloc] init];
-	[menu addItemWithTitle:@"Settings..."
-	                action:@selector(didClickPreferences:)
-	         keyEquivalent:@""];
-
-	NSMenuItem* checkUpdatesMenuItem =
-	    [[NSMenuItem alloc] initWithTitle:@"Check for updates..."
-	                               action:@selector(checkForUpdates:)
-	                        keyEquivalent:@""];
-	[checkUpdatesMenuItem setTarget:updater];
-	[menu addItem:checkUpdatesMenuItem];
-
-	[menu addItem:[NSMenuItem separatorItem]];
-	[menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
-
-	dropZone = [[ALDropZoneView alloc] initWithMenu:menu];
+	[self setIsBusyUploading:NO];
 
 	[_window setContentSize:[[prefs view] frame].size];
 	[_window setContentView:[prefs view]];
@@ -75,7 +59,7 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	return (ALAppDelegate*)[[NSApplication sharedApplication] delegate];
 }
 
-- (void)didClickPreferences:(id)sender {
+- (IBAction)didClickPreferences:(id)sender {
 	[NSApp activateIgnoringOtherApps:YES];
 	[_window makeKeyAndOrderFront:nil];
 }
