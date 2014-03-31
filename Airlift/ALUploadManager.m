@@ -41,7 +41,9 @@ static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
 	shouldDeleteFile = shouldDelete;
 	targetFilePath = fileURL;
 
-	NSString* fileName = [[targetFilePath path] lastPathComponent];
+	NSString* fileName = [[targetFilePath lastPathComponent]
+	    stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	NSLog(@"%@", fileName);
 	[request setValue:fileName forHTTPHeaderField:ALRequestHeaderFilename];
 
 	upload = [session uploadTaskWithRequest:request fromFile:targetFilePath];
