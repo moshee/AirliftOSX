@@ -68,17 +68,15 @@ const NSUInteger MAX_UPLOAD_HISTORY = 10;
 	                    0, &hotKeyRef);
 }
 
-+ (ALAppDelegate*)sharedAppDelegate {
-	return (ALAppDelegate*)[[NSApplication sharedApplication] delegate];
-}
-
 - (IBAction)didClickPreferences:(id)sender {
 	[NSApp activateIgnoringOtherApps:YES];
 	[_window makeKeyAndOrderFront:nil];
 }
 
-- (void)quit:(id)sender {
-	[NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
+#pragma mark - Shared actions
+
++ (ALAppDelegate*)sharedAppDelegate {
+	return (ALAppDelegate*)[[NSApplication sharedApplication] delegate];
 }
 
 - (void)showNotificationOfType:(ALNotificationType)notificationType
@@ -245,6 +243,8 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 	NSURL* fileURL;
 	BOOL shouldDelete;
 
+	NSLog(@"%@", types);
+
 	if ([types containsObject:NSURLPboardType]) {
 		fileURL = [NSURL URLFromPasteboard:pboard];
 		shouldDelete = NO;
@@ -282,6 +282,22 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 			       atomically:NO
 			         encoding:NSUTF8StringEncoding
 			            error:&error];
+		} else if ([types containsObject:NSPasteboardTypeTIFF]) {
+			NSLog(@"yeah");
+			NSData* data = [pboard dataForType:NSPasteboardTypeTIFF];
+			CGImageRef image = [[NSBitmapImageRep imageRepWithData:data] CGImage];
+			NSString* fileName =
+			    [ALAppDelegate createTimestampPrefixedWith:@"Image"
+			                                      endingIn:@".png"];
+			tempPath =
+			    [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+
+			fileURL = [NSURL fileURLWithPath:tempPath];
+
+			CGImageDestinationRef dst = CGImageDestinationCreateWithURL(
+			    (__bridge CFURLRef)fileURL, (CFStringRef) @"public.png", 0, NULL);
+			CGImageDestinationAddImage(dst, image, NULL);
+			CGImageDestinationFinalize(dst);
 		} else {
 			return;
 		}
@@ -298,7 +314,9 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 		}
 
 		shouldDelete = YES;
-		fileURL = [NSURL fileURLWithPath:tempPath];
+		if (fileURL == nil) {
+			fileURL = [NSURL fileURLWithPath:tempPath];
+		}
 	}
 
 	ALUploadManager* upload =
@@ -319,32 +337,5 @@ handleHotkey(EventHandlerCallRef nextHandler, EventRef anEvent, void* userData) 
 
 	return [NSString stringWithFormat:@"%@ %@%@", prefix, stamp, extension];
 }
-
-/*
-
-#pragma mark - SUUpdaterDelegate
-
-- (void)updater:(SUUpdater*)updater
-    didFinishLoadingAppcast:(SUAppcast*)appcast {
-    for (SUAppcastItem* item in [appcast items]) {
-        NSLog(@"%@", item);
-        NSLog(@"%@", [item versionString]);
-        NSLog(@"%@", [item DSASignature]);
-        NSLog(@"%@", [item fileURL]);
-    }
-}
-
-- (id<SUVersionComparison>)versionComparatorForUpdater:(SUUpdater*)updater {
-    return self;
-}
-
-#pragma mark - SUVersionComparison
-
-- (NSComparisonResult)compareVersion:(NSString*)versionA
-                           toVersion:(NSString*)versionB {
-    NSLog(@"comparing %@ to %@", versionA, versionB);
-    return NSOrderedSame;
-}
- */
 
 @end
