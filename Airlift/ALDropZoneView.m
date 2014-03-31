@@ -170,28 +170,7 @@ static NSMenuItem* emptyUploadHistoryItem;
 	}
 
 	for (ALUploadHistoryItem* historyItem in historyItems) {
-		NSMenuItem* menuItem = [NSMenuItem new];
-		NSString* title = [[historyItem filePath] lastPathComponent];
-		[menuItem setTitle:title];
-
-		NSMenuItem* copyItem =
-		    [[NSMenuItem alloc] initWithTitle:@"Copy link"
-		                               action:@selector(copyLink)
-		                        keyEquivalent:@""];
-		[copyItem setTarget:historyItem];
-
-		NSMenuItem* deleteItem =
-		    [[NSMenuItem alloc] initWithTitle:@"Delete upload"
-		                               action:@selector(deleteUpload)
-		                        keyEquivalent:@""];
-		[deleteItem setTarget:historyItem];
-
-		NSMenu* submenu = [NSMenu new];
-		[submenu addItem:copyItem];
-		[submenu addItem:deleteItem];
-		[menuItem setSubmenu:submenu];
-
-		[uploadHistoryMenu addItem:menuItem];
+		[uploadHistoryMenu addItem:[historyItem menuItem]];
 	}
 }
 

@@ -88,4 +88,28 @@
 	return msg;
 }
 
+- (NSMenuItem*)menuItem {
+	NSMenuItem* menuItem = [NSMenuItem new];
+	NSString* title = [filePath lastPathComponent];
+	[menuItem setTitle:title];
+
+	NSMenuItem* copyItem = [[NSMenuItem alloc] initWithTitle:@"Copy link"
+	                                                  action:@selector(copyLink)
+	                                           keyEquivalent:@""];
+	[copyItem setTarget:self];
+
+	NSMenuItem* deleteItem =
+	    [[NSMenuItem alloc] initWithTitle:@"Delete upload"
+	                               action:@selector(deleteUpload)
+	                        keyEquivalent:@""];
+	[deleteItem setTarget:self];
+
+	NSMenu* submenu = [NSMenu new];
+	[submenu addItem:copyItem];
+	[submenu addItem:deleteItem];
+	[menuItem setSubmenu:submenu];
+
+	return menuItem;
+}
+
 @end
