@@ -4,7 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ALUploadHistoryItem : NSObject
+@interface ALUploadHistoryItem : NSObject {
+	NSMenuItem* menuItem;
+}
 
 // The originally returned URL, with no scheme or trailing extension.
 @property (retain) NSString* URL;

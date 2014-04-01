@@ -89,7 +89,11 @@
 }
 
 - (NSMenuItem*)menuItem {
-	NSMenuItem* menuItem = [NSMenuItem new];
+	if (menuItem != nil) {
+		return menuItem;
+	}
+
+	menuItem = [NSMenuItem new];
 	NSString* title = [filePath lastPathComponent];
 	[menuItem setTitle:title];
 

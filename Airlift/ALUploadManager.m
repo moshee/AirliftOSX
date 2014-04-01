@@ -43,7 +43,6 @@ static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
 
 	NSString* fileName = [[targetFilePath lastPathComponent]
 	    stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSLog(@"%@", fileName);
 	[request setValue:fileName forHTTPHeaderField:ALRequestHeaderFilename];
 
 	upload = [session uploadTaskWithRequest:request fromFile:targetFilePath];
