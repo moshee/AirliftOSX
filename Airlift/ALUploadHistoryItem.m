@@ -15,7 +15,7 @@
 	[[ALAppDelegate sharedAppDelegate] removeUploadFromHistory:self];
 }
 
-- (void)copyLink {
+- (NSString*)constructLinkableURL {
 	NSString* url = URL;
 
 	if ([[NSUserDefaults standardUserDefaults]
@@ -41,6 +41,12 @@
 		    [NSString stringWithFormat:@"%@://%@:%d%@", scheme,
 		                               [parsedURL host], port, [parsedURL path]];
 	}
+
+	return linkableURL;
+}
+
+- (void)copyLink {
+	NSString* linkableURL = [self constructLinkableURL];
 
 	NSString* errMsg = [self copyString:linkableURL];
 	if (errMsg != nil) {
@@ -88,6 +94,11 @@
 	return msg;
 }
 
+- (void)visitLink {
+	NSString* linkableURL = [self constructLinkableURL];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:linkableURL]];
+}
+
 - (NSMenuItem*)menuItem {
 	if (menuItem != nil) {
 		return menuItem;
@@ -97,19 +108,26 @@
 	NSString* title = [filePath lastPathComponent];
 	[menuItem setTitle:title];
 
-	NSMenuItem* copyItem = [[NSMenuItem alloc] initWithTitle:@"Copy link"
+	NSMenuItem* visitLinkItem =
+	    [[NSMenuItem alloc] initWithTitle:@"Open in Browser"
+	                               action:@selector(visitLink)
+	                        keyEquivalent:@""];
+	[visitLinkItem setTarget:self];
+
+	NSMenuItem* copyItem = [[NSMenuItem alloc] initWithTitle:@"Copy Link"
 	                                                  action:@selector(copyLink)
 	                                           keyEquivalent:@""];
 	[copyItem setTarget:self];
 
 	NSMenuItem* deleteItem =
-	    [[NSMenuItem alloc] initWithTitle:@"Delete upload"
+	    [[NSMenuItem alloc] initWithTitle:@"Delete Upload"
 	                               action:@selector(deleteUpload)
 	                        keyEquivalent:@""];
 	[deleteItem setTarget:self];
 
 	NSMenu* submenu = [NSMenu new];
 	[submenu addItem:copyItem];
+	[submenu addItem:visitLinkItem];
 	[submenu addItem:deleteItem];
 	[menuItem setSubmenu:submenu];
 

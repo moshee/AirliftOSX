@@ -17,6 +17,7 @@
 
 - (void)deleteUpload;
 - (void)copyLink;
+- (void)visitLink;
 - (NSMenuItem*)menuItem;
 
 @end
