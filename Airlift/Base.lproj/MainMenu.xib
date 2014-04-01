@@ -33,7 +33,7 @@
         <customObject id="L2x-vR-OG2" customClass="SUUpdater"/>
         <menu id="ogp-yE-854">
             <items>
-                <menuItem title="Cancel upload" hidden="YES" id="K0g-Ks-ean">
+                <menuItem title="Cancel Upload" hidden="YES" id="K0g-Ks-ean">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="cancelUpload:" target="hc8-u0-jgh" id="uYS-dp-J8V"/>
@@ -44,15 +44,15 @@
                         </binding>
                     </connections>
                 </menuItem>
-                <menuItem title="Delete last upload" id="Evc-l2-v0d">
+                <menuItem title="Delete Last Upload" id="Evc-l2-v0d">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="oops:" target="hc8-u0-jgh" id="Vlp-io-gsB"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Past uploads" id="R40-lv-wWB">
+                <menuItem title="Past Uploads" id="R40-lv-wWB">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Past uploads" id="WET-FQ-WbA">
+                    <menu key="submenu" title="Past Uploads" id="WET-FQ-WbA">
                         <items>
                             <menuItem title="(No uploads)" enabled="NO" id="tiK-fc-qkH">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -61,13 +61,13 @@
                     </menu>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="toY-dR-zzd"/>
-                <menuItem title="Settings..." id="w2b-lX-TKI">
+                <menuItem title="Settings…" id="w2b-lX-TKI">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="didClickPreferences:" target="494" id="0aR-Sc-B4c"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Check for updates..." id="WDw-ar-84T">
+                <menuItem title="Check for Updates…" id="WDw-ar-84T">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="checkForUpdates:" target="L2x-vR-OG2" id="Aky-6l-4Un"/>
