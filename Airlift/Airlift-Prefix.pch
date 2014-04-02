@@ -15,3 +15,15 @@ typedef enum {
 	ALNotificationUploadAborted,
 	ALNotificationParameterError
 } ALNotificationType;
+
+typedef enum {
+	ALHotkeyTakeScreenshot = 0,
+	ALHotkeyTakeFullScreenshot,
+	ALHotkeyUploadFromFinder,
+	ALHotkeyUploadFromPasteboard
+} ALHotkeyAction;
+
+static NSString* const ALHostKey = @"ALHost";
+static NSString* const ALPortKey = @"ALPort";
+static NSString* const ALShouldInsertPortKey = @"ALShouldInsertPort";
+static NSString* const ALShouldAppendExtensionKey = @"ALShouldAppendExtension";

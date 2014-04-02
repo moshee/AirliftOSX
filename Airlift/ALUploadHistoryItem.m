@@ -18,8 +18,7 @@
 - (NSString*)constructLinkableURL {
 	NSString* url = URL;
 
-	if ([[NSUserDefaults standardUserDefaults]
-	        boolForKey:@"appendExtensions"]) {
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:ALShouldAppendExtensionKey]) {
 		NSString* ext = [[filePath path] pathExtension];
 		url = [url stringByAppendingPathExtension:ext];
 	}
@@ -29,7 +28,7 @@
 
 	NSString* linkableURL = [NSString stringWithFormat:@"%@://%@", scheme, url];
 	BOOL shouldInsertPort =
-	    [[NSUserDefaults standardUserDefaults] boolForKey:@"shouldInsertPort"];
+	    [[NSUserDefaults standardUserDefaults] boolForKey:ALShouldInsertPortKey];
 
 	if (shouldInsertPort
 	    && !(([scheme isEqualToString:@"http"] && port == 80)

@@ -22,9 +22,6 @@
 
 @implementation ALUploadManager
 
-static NSString* const ALRequestHeaderFilename = @"X-Airlift-Filename";
-static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
-
 - (id)initWithFileURL:(NSURL*)fileURL
     deletingFileAfterwards:(BOOL)shouldDelete {
 
@@ -33,7 +30,7 @@ static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
 		return self;
 
 	appDelegate = [ALAppDelegate sharedAppDelegate];
-	request = [ALUploadManager constructRequestToPath:@"/upload/file"];
+	request = [ALUploadManager constructRequestToPath:ALEndpointUploadFile];
 	session = [NSURLSession sessionWithConfiguration:nil
 	                                        delegate:self
 	                                   delegateQueue:nil];
@@ -76,7 +73,7 @@ static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
 
 	NSURL* parsedHost = [NSURL URLWithString:host];
 	NSString* port =
-	    [[NSUserDefaults standardUserDefaults] stringForKey:@"port"];
+	    [[NSUserDefaults standardUserDefaults] stringForKey:ALPortKey];
 
 	NSString* hostPort =
 	    [NSString stringWithFormat:@"%@://%@:%@%@", [parsedHost scheme],
@@ -166,7 +163,7 @@ static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";
 	NSLog(@"Going to delete last file uploaded");
 
 	NSMutableURLRequest* request =
-	    [ALUploadManager constructRequestToPath:@"/oops"];
+	    [ALUploadManager constructRequestToPath:ALEndpointOops];
 
 	void (^completionHandler)(NSData*, NSURLResponse*, NSError*);
 

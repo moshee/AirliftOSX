@@ -20,3 +20,9 @@
 - (void)cancel;
 
 @end
+
+static NSString* const ALEndpointUploadFile = @"/upload/file";
+static NSString* const ALEndpointOops = @"/oops";
+
+static NSString* const ALRequestHeaderFilename = @"X-Airlift-Filename";
+static NSString* const ALRequestHeaderPassword = @"X-Airlift-Password";

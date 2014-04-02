@@ -35,11 +35,4 @@
 
 - (IBAction)didClickPreferences:(id)sender;
 
-typedef enum {
-	ALHotkeyTakeScreenshot = 0,
-	ALHotkeyTakeFullScreenshot,
-	ALHotkeyUploadFromFinder,
-	ALHotkeyUploadFromPasteboard
-} ALHotkeyAction;
-
 @end

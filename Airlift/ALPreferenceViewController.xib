@@ -50,7 +50,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="2eN-FZ-YlG" name="value" keyPath="values.port" id="VZe-7h-4v1"/>
+                        <binding destination="2eN-FZ-YlG" name="value" keyPath="values.ALPort" id="bgV-Iq-gaF"/>
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HFk-rw-0Qd">
@@ -95,7 +95,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="2eN-FZ-YlG" name="value" keyPath="values.appendExtensions" id="fyq-Vj-EmA"/>
+                        <binding destination="2eN-FZ-YlG" name="value" keyPath="values.ALShouldAppendExtensions" id="fDE-oA-fnM"/>
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" placeholderIntrinsicWidth="181" placeholderIntrinsicHeight="17" translatesAutoresizingMaskIntoConstraints="NO" id="YMt-t6-LY0">
@@ -118,7 +118,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="2eN-FZ-YlG" name="value" keyPath="values.shouldInsertPort" id="utv-sZ-rqY"/>
+                        <binding destination="2eN-FZ-YlG" name="value" keyPath="values.ALShouldInsertPort" id="cUg-O6-9VP"/>
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dck-zr-B3C">

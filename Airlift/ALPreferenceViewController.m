@@ -9,14 +9,14 @@
 
 @synthesize versionString, configuredHost, configuredPassword;
 
-static NSString* const serviceName = @"airlift";
+static NSString* const ALKeychainServiceName = @"airlift";
 
 - (id)initWithCoder:(NSCoder*)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self != nil) {
 		NSString* host =
-		    [[NSUserDefaults standardUserDefaults] stringForKey:@"host"];
+		    [[NSUserDefaults standardUserDefaults] stringForKey:ALHostKey];
 		NSString* password =
 		    [ALPreferenceViewController retrievePasswordForHost:host];
 
@@ -57,7 +57,7 @@ static NSString* const serviceName = @"airlift";
 	// TODO: look up the corresponding password and set it if it's not empty?
 	// this could get messy though as people change stuff and then lots of
 	// incomplete hosts get associated with lots of incomplete passwords
-	[[NSUserDefaults standardUserDefaults] setObject:host forKey:@"host"];
+	[[NSUserDefaults standardUserDefaults] setObject:host forKey:ALHostKey];
 }
 
 - (IBAction)didEnterPassword:(id)sender {
@@ -75,9 +75,9 @@ static NSString* const serviceName = @"airlift";
 + (void)updatePassword:(NSString*)newPassword forHost:(NSString*)host {
 	UInt32 hostLength = (UInt32)host.length;
 	const char* hostChars = [host cStringUsingEncoding:NSUTF8StringEncoding];
-	UInt32 serviceLength = (UInt32)serviceName.length;
+	UInt32 serviceLength = (UInt32)ALKeychainServiceName.length;
 	const char* serviceChars =
-	    [serviceName cStringUsingEncoding:NSUTF8StringEncoding];
+	    [ALKeychainServiceName cStringUsingEncoding:NSUTF8StringEncoding];
 	UInt32 passwordLength = (UInt32)newPassword.length;
 	const char* passwordChars =
 	    [newPassword cStringUsingEncoding:NSUTF8StringEncoding];
@@ -110,9 +110,9 @@ static NSString* const serviceName = @"airlift";
 
 	UInt32 hostLength = (UInt32)host.length;
 	const char* hostChars = [host cStringUsingEncoding:NSUTF8StringEncoding];
-	UInt32 serviceLength = (UInt32)serviceName.length;
+	UInt32 serviceLength = (UInt32)ALKeychainServiceName.length;
 	const char* serviceChars =
-	    [serviceName cStringUsingEncoding:NSUTF8StringEncoding];
+	    [ALKeychainServiceName cStringUsingEncoding:NSUTF8StringEncoding];
 	void* passwordData;
 	UInt32 passwordLength;
 
