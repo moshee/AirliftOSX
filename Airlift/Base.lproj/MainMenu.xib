@@ -93,5 +93,115 @@
                 <outlet property="uploadHistoryMenu" destination="WET-FQ-WbA" id="f1o-8A-ndu"/>
             </connections>
         </customView>
+        <menu title="Main Menu" systemMenu="main" id="sTv-zs-0hv">
+            <items>
+                <menuItem title="Airlift" id="Jcj-yt-BUa">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Airlift" systemMenu="apple" id="sLx-sf-jX8">
+                        <items>
+                            <menuItem title="About Airlift" id="eEx-36-rDf">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="orderFrontStandardAboutPanel:" target="-3" id="vOX-dw-1Hp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="mW3-Ey-9H8"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="14e-0N-J24">
+                                <connections>
+                                    <action selector="didClickPreferences:" target="494" id="nKL-Hr-OwP"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="R8D-nF-X8p"/>
+                            <menuItem title="Services" id="FY3-pA-Prk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Services" systemMenu="services" id="qrB-VU-1Ig"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Zj1-JO-ua2"/>
+                            <menuItem title="Hide Airlift" keyEquivalent="h" id="DWD-OX-cUj">
+                                <connections>
+                                    <action selector="hide:" target="-1" id="XLx-UC-Gya"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Hide Others" keyEquivalent="h" id="sDz-7m-7U3">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideOtherApplications:" target="-1" id="gv7-pt-Pn1"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show All" id="lXo-25-mgg">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="R2M-IB-rrG"/>
+                            <menuItem title="Quit Airlift" keyEquivalent="q" id="Q4X-bW-ShI">
+                                <connections>
+                                    <action selector="terminate:" target="-3" id="ENv-Vh-icX"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Edit" id="O6D-Xn-eZ1">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Edit" id="lBh-2N-Vov">
+                        <items>
+                            <menuItem title="Undo" keyEquivalent="z" id="UQQ-VV-YjN">
+                                <connections>
+                                    <action selector="undo:" target="-1" id="6ce-0f-wbs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Redo" keyEquivalent="Z" id="Ywb-IU-3tm"/>
+                            <menuItem isSeparatorItem="YES" id="z7r-zO-5Wt"/>
+                            <menuItem title="Cut" keyEquivalent="x" id="uS3-gR-nfL">
+                                <connections>
+                                    <action selector="cut:" target="-1" id="ViH-Oh-w3N"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Copy" keyEquivalent="c" id="WMN-xl-pGV">
+                                <connections>
+                                    <action selector="copy:" target="-1" id="Gx9-hd-0Cq"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Paste" keyEquivalent="v" id="FMr-dK-39M">
+                                <connections>
+                                    <action selector="paste:" target="-1" id="DGL-8g-BkO"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete" id="yg2-5V-Eqc">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Select All" keyEquivalent="a" id="6EW-25-OXz">
+                                <connections>
+                                    <action selector="selectAll:" target="-1" id="tOw-23-YCj"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Window" id="3vN-gy-FdO">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Window" systemMenu="window" id="RAy-Jt-LJB">
+                        <items>
+                            <menuItem title="Close" keyEquivalent="w" id="gBi-jU-cCL">
+                                <connections>
+                                    <action selector="performClose:" target="IKf-XO-YLi" id="kxj-Ko-wiB"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Minimize" keyEquivalent="m" id="boq-sK-2no">
+                                <connections>
+                                    <action selector="performMiniaturize:" target="IKf-XO-YLi" id="kZe-9T-ufk"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom" id="CjT-Sv-dUz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="qqw-KA-Y4J"/>
+                            <menuItem title="Bring All to Front" id="t9u-Ze-cRR">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+            </items>
+        </menu>
     </objects>
 </document>
